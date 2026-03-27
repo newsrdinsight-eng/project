@@ -555,6 +555,14 @@
                 color: #042028;
                 border-color: transparent;
             }
+            .editor-left-content {
+                flex: 1;
+                overflow-y: auto;
+                overflow-x: hidden;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+            }
             .editor-left-footer {
                 padding: 12px 16px;
                 border-top: 1px solid var(--border);
@@ -579,13 +587,20 @@
                 }
                 .editor-left {
                     width: 100%;
-                    max-height: 45vh;
+                    max-height: 65vh;
                     border-right: none;
                     border-bottom: 1px solid var(--border);
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                }
+                .editor-left-content {
+                    max-height: 55vh;
                     overflow-y: auto;
                 }
                 .editor-right {
                     width: 100%;
+                    flex: 1;
+                    min-height: 35vh;
                 }
                 .tab-btn {
                     flex: 1;
@@ -597,14 +612,14 @@
                     width: 90vw;
                     height: auto;
                     aspect-ratio: 9/16;
-                    max-height: 50vh;
+                    max-height: 45vh;
                 }
                 .section-block {
                     padding: 10px 12px;
+                    margin-bottom: 8px;
                 }
                 .styles-grid {
                     grid-template-columns: 1fr;
-                    max-height: 200px;
                 }
                 .chip {
                     padding: 5px 8px;
@@ -625,13 +640,20 @@
                     font-size: 10px;
                 }
                 .ai-clips-section {
-                    max-height: 200px;
+                    max-height: auto;
                 }
                 .ai-clips-carousel {
                     gap: 6px;
                 }
                 .clip-card {
                     width: 70px;
+                }
+                .editor-left-footer {
+                    padding: 12px;
+                    gap: 10px;
+                    flex-shrink: 0;
+                    border-top: 1px solid var(--border);
+                    background: var(--bg-panel);
                 }
             }
 
@@ -645,23 +667,31 @@
                     gap: 4px;
                 }
                 .editor-left {
-                    max-height: 40vh;
+                    max-height: 70vh;
+                }
+                .editor-left-content {
+                    max-height: 60vh;
                 }
                 .video-container {
                     width: 95vw;
-                    max-height: 55vh;
+                    height: auto;
+                    aspect-ratio: 9/16;
+                    max-height: 48vh;
                 }
                 .section-block {
                     padding: 8px 10px;
                     gap: 6px;
+                    margin-bottom: 6px;
                 }
                 .btn-action {
-                    padding: 8px 10px;
+                    padding: 10px 12px;
                     font-size: 11px;
+                    flex: 1;
                 }
                 .select-styled {
-                    padding: 7px 8px;
+                    padding: 8px 10px;
                     font-size: 11px;
+                    flex: 1;
                 }
                 .styles-grid {
                     grid-template-columns: 1fr;
@@ -670,6 +700,21 @@
                 .chip {
                     padding: 4px 6px;
                     font-size: 9px;
+                }
+                .editor-left-footer {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    padding: 10px;
+                    border-top: 1px solid var(--border);
+                    background: var(--bg-panel);
+                    flex-shrink: 0;
+                }
+                .editor-left-footer > div:first-child {
+                    width: 100%;
+                }
+                .editor-left-footer > button {
+                    width: 100%;
                 }
             }
 
@@ -2478,6 +2523,7 @@
                 }
             }
         </style>
+        <script async src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
     </head>
     <body>
         <nav class="navbar">
@@ -2593,6 +2639,7 @@
                         </button>
                     </div>
 
+                    <div class="editor-left-content">
                     <!-- TAB: Subir -->
                     <div class="tab-content active" id="tab-upload">
                         <div class="drop-zone" id="dropZone">
@@ -3306,6 +3353,8 @@
                                 ></div>
                             </div>
                         </div>
+                    </div>
+
                     </div>
 
                     <div class="editor-left-footer">
@@ -4860,16 +4909,28 @@
                 const quality = qualitySelect.value || "720p";
                 const settings = qualitySettings[quality];
 
-                downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Descargando...';
+                downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Procesando...';
 
                 try {
-                    // Crear canvas con la calidad seleccionada
+                    const { FFmpeg, fetchFile } = FFmpeg;
+                    const ffmpeg = new FFmpeg.FFmpeg();
+                    
+                    // Cargar FFmpeg si no está ya cargado
+                    if (!ffmpeg.isLoaded()) {
+                        downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Inicializando...';
+                        await ffmpeg.load();
+                    }
+
+                    // Crear canvas para capturar el video
                     const canvas = document.createElement("canvas");
                     canvas.width = settings.width;
                     canvas.height = settings.height;
                     const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
-                    // Obtener el stream de audio del video original
+                    // Canvas para captura como stream
+                    let stream = canvas.captureStream(settings.fps);
+                    
+                    // Capturar audio del video original
                     let audioTracks = [];
                     try {
                         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -4877,29 +4938,29 @@
                         const destination = audioContext.createMediaStreamDestination();
                         source.connect(destination);
                         audioTracks = destination.stream.getAudioTracks();
+                        
+                        if (audioTracks.length > 0) {
+                            audioTracks.forEach(track => stream.addTrack(track));
+                        }
                     } catch (e) {
-                        console.warn("No se pudo capturar audio:", e);
+                        console.warn("Audio context: ", e);
                     }
 
-                    // Configurar stream del canvas
-                    let stream = canvas.captureStream(settings.fps);
-
-                    // Agregar audio si está disponible
-                    if (audioTracks.length > 0) {
-                        audioTracks.forEach(track => stream.addTrack(track));
-                    }
-
-                    // Determinar MIME type
+                    // Grabar en WebM primero
+                    const recordedChunks = [];
                     let mimeType = "video/webm";
+                    
                     if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
                         mimeType = "video/webm;codecs=vp8";
                     }
 
-                    const recordedChunks = [];
-                    const mediaRecorder = new MediaRecorder(stream, { mimeType });
+                    const mediaRecorder = new MediaRecorder(stream, { 
+                        mimeType,
+                        videoBitsPerSecond: parseInt(settings.bitrate) * 1000
+                    });
 
                     mediaRecorder.onerror = (event) => {
-                        console.error("Error en grabación:", event.error);
+                        console.error("Error:", event.error);
                         alert("Error: " + event.error);
                         cleanupDownload();
                     };
@@ -4908,20 +4969,59 @@
                         if (e.data.size > 0) recordedChunks.push(e.data);
                     };
 
-                    mediaRecorder.onstop = () => {
-                        const blob = new Blob(recordedChunks, { type: mimeType });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement("a");
-                        a.href = url;
-                        a.download = `short_editado_${quality}.webm`;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
+                    let conversionComplete = false;
+                    
+                    mediaRecorder.onstop = async () => {
+                        if (conversionComplete) return;
+                        conversionComplete = true;
                         
-                        setTimeout(() => {
-                            URL.revokeObjectURL(url);
+                        try {
+                            downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Convirtiendo a MP4...';
+
+                            // Crear blob del WebM
+                            const webmBlob = new Blob(recordedChunks, { type: mimeType });
+                            
+                            // Escribir el WebM en FFmpeg
+                            ffmpeg.FS('writeFile', 'input.webm', new Uint8Array(await webmBlob.arrayBuffer()));
+
+                            // Convertir a MP4 con buena calidad
+                            await ffmpeg.run(
+                                '-i', 'input.webm',
+                                '-c:v', 'libx264',
+                                '-preset', 'fast',
+                                '-crf', '18',
+                                '-c:a', 'aac',
+                                '-b:a', '192k',
+                                '-movflags', '+faststart',
+                                'output.mp4'
+                            );
+
+                            // Leer el archivo MP4 generado
+                            const data = ffmpeg.FS('readFile', 'output.mp4');
+                            const mp4Blob = new Blob([data.buffer], { type: 'video/mp4' });
+
+                            // Limpiar archivos de FFmpeg
+                            ffmpeg.FS('unlink', 'input.webm');
+                            ffmpeg.FS('unlink', 'output.mp4');
+
+                            // Descargar el MP4
+                            const url = URL.createObjectURL(mp4Blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `short_editado_${quality}.mp4`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+
+                            setTimeout(() => {
+                                URL.revokeObjectURL(url);
+                                cleanupDownload();
+                            }, 500);
+                        } catch (err) {
+                            console.error("FFmpeg error:", err);
+                            alert("Error al convertir: " + err.message);
                             cleanupDownload();
-                        }, 500);
+                        }
                     };
 
                     mediaRecorder.start();
@@ -5037,11 +5137,11 @@
                             isCapturing = false;
                             mediaRecorder.stop();
                         }
-                    }, (videoDuration + 5) * 1000);
+                    }, (videoDuration + 10) * 1000);
 
                 } catch (error) {
                     console.error("Error descargando:", error);
-                    alert("Error al descargar: " + error.message);
+                    alert("Error: " + error.message);
                     cleanupDownload();
                 }
             }
