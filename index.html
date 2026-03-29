@@ -3412,7 +3412,6 @@
                     ctx.filter = `blur(${BLUR_PX}px)`;
                     ctx.drawImage(videoEl, 0, Math.max(0, vh - srcStripH), vw, srcStripH, 0, CANVAS_H - stripH, CANVAS_W, stripH);
                     ctx.restore();
-                    ctx.filter = 'none';
 
                     ctx.fillStyle = 'rgba(0,0,0,0.04)';
                     ctx.fillRect(0, 0, CANVAS_W, stripH);
@@ -3469,7 +3468,6 @@
               };
 
               ctx.save();
-              ctx.filter = 'none';
               
               // 1. Configuración de Estilo, Fuente y Alineación
               const styleId = parseInt(currentStyle.replace('style-', '')) || 1;
@@ -3528,15 +3526,16 @@
                   else lineX = (CANVAS_W - line.width) / 2;
 
                   if (cfg.bg || cfg.grad) {
+                      ctx.filter = 'none';
                       const boxW = line.width + (cfg.paddingX * 2);
-                      const boxH = baseFontSize * 1.5;
+                      const boxH = baseFontSize * 1.4;
                       const boxX = lineX - cfg.paddingX;
                       if (cfg.grad) {
                           const g = ctx.createLinearGradient(Math.round(boxX), 0, Math.round(boxX + boxW), 0);
                           g.addColorStop(0, cfg.grad[0]); g.addColorStop(1, cfg.grad[1]);
                           ctx.fillStyle = g;
                       } else ctx.fillStyle = cfg.bg;
-                      roundRect(ctx, Math.round(boxX), Math.round(lineY - boxH/2), Math.round(boxW), Math.round(boxH), cfg.radius);
+                      roundRect(ctx, Math.round(boxX), Math.round(lineY - (boxH / 2) + (baseFontSize * 0.05)), Math.round(boxW), Math.round(boxH), cfg.radius > 100 ? boxH / 2 : cfg.radius);
                       ctx.fill();
                   }
 
@@ -3544,6 +3543,30 @@
                   line.words.forEach((w, i) => {
                       const wordText = w.word.toUpperCase();
                       const wordWidth = w.width;
+                      
+                      // Sincronización exacta con lógica de Preview
+                      const cleanWord = w.word.replace(/[.,!?;:'"()]/g, "").toLowerCase();
+                      const negList = ["no","never","none","nothing","nowhere","nobody","neither","nor","can't","won't","don't","doesn't","didn't","isn't","aren't","wasn't","weren't","haven't","hasn't","hadn't","shouldn't","wouldn't","couldn't","mightn't","mustn't"];
+                      const isNeg = negList.includes(cleanWord);
+                      const isCap = w.word.length > 3 && w.word[0] === w.word[0].toUpperCase();
+
+                      let fill = cfg.text;
+                      ctx.shadowBlur = 0; // Reset sombra por defecto
+
+                      if (isNeg) {
+                          fill = "#ff6b6b"; // Rojo de la clase .negative
+                          ctx.shadowColor = "rgba(255, 107, 107, 0.4)";
+                          ctx.shadowBlur = 10;
+                      } else if (isCap) {
+                          fill = currentEmphColor || "#7cfc9a"; // Clase .emph (verde por defecto)
+                          ctx.shadowColor = currentEmphGlow || fill;
+                          ctx.shadowBlur = 15;
+                      } else if (!cfg.bg && !cfg.grad) {
+                          ctx.shadowColor = "rgba(0,0,0,0.95)";
+                          ctx.shadowBlur = 12;
+                          ctx.shadowOffsetY = 4;
+                      }
+
                       const wordMidX = currentX + wordWidth / 2;
                       const wordElapsed = t - w.start;
 
@@ -3586,10 +3609,6 @@
                           ctx.scale(scale, scale);
                           ctx.rotate(rotate * Math.PI / 180);
 
-                          let fill = cfg.text;
-                          const isCap = w.word.length > 3 && w.word[0] === w.word[0].toUpperCase();
-                          if (currentEmphColor && isCap) { fill = currentEmphColor; ctx.shadowColor = currentEmphGlow || currentEmphColor; ctx.shadowBlur = 15; }
-                          else if (!cfg.bg && !cfg.grad) { ctx.shadowColor = "rgba(0,0,0,0.95)"; ctx.shadowBlur = 12; ctx.shadowOffsetY = 4; }
                           ctx.fillStyle = fill; ctx.textAlign = "left"; ctx.fillText(wordText, -wordWidth/2, 0);
                           ctx.restore();
                       }
@@ -3601,8 +3620,6 @@
 
             /* Text helpers */
             function roundRect(ctx,x,y,w,h,r){
-              if (w < 2 * r) r = w / 2;
-              if (h < 2 * r) r = h / 2;
               ctx.beginPath();
               ctx.moveTo(x+r,y);
               ctx.arcTo(x+w,y,x+w,y+h,r);
