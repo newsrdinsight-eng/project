@@ -1112,32 +1112,6 @@
                 position: relative;
                 z-index: 1;
             }
-            .blur-strip {
-                position: absolute;
-                left: 0;
-                width: 100%;
-                height: 18%;
-                z-index: 2;
-                overflow: hidden;
-                pointer-events: none;
-            }
-            .blur-strip img {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                width: 420px;
-                height: 740px;
-                object-fit: cover;
-                filter: blur(22px) saturate(1.1) brightness(0.55);
-            }
-            .blur-top {
-                top: 0;
-            }
-            .blur-bottom {
-                bottom: 0;
-                transform: rotate(180deg);
-            }
             .overlay-top,
             .overlay-bottom {
                 position: absolute;
@@ -3190,374 +3164,17 @@
 
                     <!-- TAB: Estilo -->
                     <div class="tab-content" id="tab-style">
+                        <!-- El selector de fuente ha sido eliminado según la solicitud -->
                         <div class="section-block">
-                            <div class="section-header">
-                                <span class="section-title">Fuente</span>
-                            </div>
-                            <select id="fontSelect" class="select-styled">
-                                <optgroup label="— Sans Serif —">
-                                    <option value="Inter">Inter</option>
-                                    <option value="Roboto">Roboto</option>
-                                    <option value="Open Sans">Open Sans</option>
-                                    <option value="Lato">Lato</option>
-                                    <option value="Poppins">Poppins</option>
-                                    <option value="Montserrat">
-                                        Montserrat
-                                    </option>
-                                    <option value="Raleway">Raleway</option>
-                                    <option value="Nunito">Nunito</option>
-                                    <option value="Outfit">Outfit</option>
-                                    <option value="Manrope">Manrope</option>
-                                    <option value="DM Sans">DM Sans</option>
-                                    <option value="Plus Jakarta Sans">
-                                        Plus Jakarta Sans
-                                    </option>
-                                    <option value="Space Grotesk">
-                                        Space Grotesk
-                                    </option>
-                                    <option value="Sora">Sora</option>
-                                    <option value="Urbanist">Urbanist</option>
-                                    <option value="Jost">Jost</option>
-                                    <option value="Mulish">Mulish</option>
-                                    <option value="Work Sans">Work Sans</option>
-                                    <option value="Karla">Karla</option>
-                                    <option value="Cabin">Cabin</option>
-                                    <option value="Public Sans">
-                                        Public Sans
-                                    </option>
-                                    <option value="Commissioner">
-                                        Commissioner
-                                    </option>
-                                    <option value="Epilogue">Epilogue</option>
-                                    <option value="Archivo">Archivo</option>
-                                    <option value="Barlow">Barlow</option>
-                                    <option value="Heebo">Heebo</option>
-                                    <option value="Chivo">Chivo</option>
-                                    <option value="Asap">Asap</option>
-                                    <option value="Source Sans 3">
-                                        Source Sans 3
-                                    </option>
-                                    <option value="Lexend">Lexend</option>
-                                    <option value="Be Vietnam Pro">
-                                        Be Vietnam Pro
-                                    </option>
-                                    <option value="Onest">Onest</option>
-                                    <option value="Rethink Sans">
-                                        Rethink Sans
-                                    </option>
-                                    <option value="Atkinson Hyperlegible">
-                                        Atkinson Hyperlegible
-                                    </option>
-                                    <option value="Oxygen">Oxygen</option>
-                                    <option value="Varela Round">
-                                        Varela Round
-                                    </option>
-                                    <option value="Nunito Sans">
-                                        Nunito Sans
-                                    </option>
-                                </optgroup>
-                                <optgroup label="— Display / Bold —">
-                                    <option value="Bebas Neue">
-                                        Bebas Neue
-                                    </option>
-                                    <option value="Oswald">Oswald</option>
-                                    <option value="Rubik">Rubik</option>
-                                    <option value="Anton">Anton</option>
-                                    <option value="Barlow Condensed">
-                                        Barlow Condensed
-                                    </option>
-                                    <option value="Big Shoulders Display">
-                                        Big Shoulders Display
-                                    </option>
-                                    <option value="Fjalla One">
-                                        Fjalla One
-                                    </option>
-                                    <option value="Teko">Teko</option>
-                                    <option value="Rajdhani">Rajdhani</option>
-                                    <option value="Staatliches">
-                                        Staatliches
-                                    </option>
-                                    <option value="League Gothic">
-                                        League Gothic
-                                    </option>
-                                    <option value="Squada One">
-                                        Squada One
-                                    </option>
-                                    <option value="Passion One">
-                                        Passion One
-                                    </option>
-                                    <option value="Racing Sans One">
-                                        Racing Sans One
-                                    </option>
-                                    <option value="Russo One">Russo One</option>
-                                    <option value="Righteous">Righteous</option>
-                                    <option value="Boogaloo">Boogaloo</option>
-                                    <option value="Lilita One">
-                                        Lilita One
-                                    </option>
-                                    <option value="Alfa Slab One">
-                                        Alfa Slab One
-                                    </option>
-                                    <option value="Abril Fatface">
-                                        Abril Fatface
-                                    </option>
-                                    <option value="Acme">Acme</option>
-                                    <option value="Bangers">Bangers</option>
-                                    <option value="Chewy">Chewy</option>
-                                    <option value="Luckiest Guy">
-                                        Luckiest Guy
-                                    </option>
-                                    <option value="Fredoka">Fredoka</option>
-                                    <option value="Rowdies">Rowdies</option>
-                                    <option value="Black Ops One">
-                                        Black Ops One
-                                    </option>
-                                    <option value="Titan One">Titan One</option>
-                                    <option value="Francois One">
-                                        Francois One
-                                    </option>
-                                    <option value="BenchNine">BenchNine</option>
-                                    <option value="Antonio">Antonio</option>
-                                    <option value="Graduate">Graduate</option>
-                                    <option value="Michroma">Michroma</option>
-                                    <option value="Turret Road">
-                                        Turret Road
-                                    </option>
-                                    <option value="Oxanium">Oxanium</option>
-                                    <option value="Orbitron">Orbitron</option>
-                                    <option value="Audiowide">Audiowide</option>
-                                    <option value="Electrolize">
-                                        Electrolize
-                                    </option>
-                                    <option value="Syncopate">Syncopate</option>
-                                </optgroup>
-                                <optgroup label="— Serif —">
-                                    <option value="Merriweather">
-                                        Merriweather
-                                    </option>
-                                    <option value="Lora">Lora</option>
-                                    <option value="Playfair Display">
-                                        Playfair Display
-                                    </option>
-                                    <option value="Cormorant Garamond">
-                                        Cormorant Garamond
-                                    </option>
-                                    <option value="Source Serif 4">
-                                        Source Serif 4
-                                    </option>
-                                    <option value="PT Serif">PT Serif</option>
-                                    <option value="Libre Baskerville">
-                                        Libre Baskerville
-                                    </option>
-                                    <option value="Crimson Text">
-                                        Crimson Text
-                                    </option>
-                                    <option value="Bitter">Bitter</option>
-                                    <option value="Arvo">Arvo</option>
-                                    <option value="Rokkitt">Rokkitt</option>
-                                    <option value="Zilla Slab">
-                                        Zilla Slab
-                                    </option>
-                                    <option value="Inknut Antiqua">
-                                        Inknut Antiqua
-                                    </option>
-                                    <option value="Vollkorn">Vollkorn</option>
-                                    <option value="DM Serif Display">
-                                        DM Serif Display
-                                    </option>
-                                    <option value="Spectral">Spectral</option>
-                                    <option value="Young Serif">
-                                        Young Serif
-                                    </option>
-                                    <option value="Fraunces">Fraunces</option>
-                                    <option value="Cinzel">Cinzel</option>
-                                    <option value="Cinzel Decorative">
-                                        Cinzel Decorative
-                                    </option>
-                                </optgroup>
-                                <optgroup label="— Monospace —">
-                                    <option value="JetBrains Mono">
-                                        JetBrains Mono
-                                    </option>
-                                    <option value="Fira Code">Fira Code</option>
-                                    <option value="Source Code Pro">
-                                        Source Code Pro
-                                    </option>
-                                    <option value="Space Mono">
-                                        Space Mono
-                                    </option>
-                                    <option value="Roboto Mono">
-                                        Roboto Mono
-                                    </option>
-                                    <option value="IBM Plex Mono">
-                                        IBM Plex Mono
-                                    </option>
-                                    <option value="DM Mono">DM Mono</option>
-                                    <option value="Courier Prime">
-                                        Courier Prime
-                                    </option>
-                                    <option value="Inconsolata">
-                                        Inconsolata
-                                    </option>
-                                    <option value="VT323">VT323</option>
-                                </optgroup>
-                                <optgroup label="— Handwriting —">
-                                    <option value="Dancing Script">
-                                        Dancing Script
-                                    </option>
-                                    <option value="Pacifico">Pacifico</option>
-                                    <option value="Satisfy">Satisfy</option>
-                                    <option value="Great Vibes">
-                                        Great Vibes
-                                    </option>
-                                    <option value="Lobster">Lobster</option>
-                                    <option value="Caveat">Caveat</option>
-                                    <option value="Kalam">Kalam</option>
-                                    <option value="Patrick Hand">
-                                        Patrick Hand
-                                    </option>
-                                    <option value="Indie Flower">
-                                        Indie Flower
-                                    </option>
-                                    <option value="Shadows Into Light">
-                                        Shadows Into Light
-                                    </option>
-                                    <option value="Permanent Marker">
-                                        Permanent Marker
-                                    </option>
-                                    <option value="Rock Salt">Rock Salt</option>
-                                    <option value="Sacramento">
-                                        Sacramento
-                                    </option>
-                                    <option value="Merienda">Merienda</option>
-                                    <option value="Amatic SC">Amatic SC</option>
-                                    <option value="Courgette">Courgette</option>
-                                    <option value="Tangerine">Tangerine</option>
-                                    <option value="Kaushan Script">
-                                        Kaushan Script
-                                    </option>
-                                </optgroup>
-                                <optgroup label="— Decorativo —">
-                                    <option value="Press Start 2P">
-                                        Press Start 2P
-                                    </option>
-                                    <option value="Creepster">Creepster</option>
-                                    <option value="Pirata One">
-                                        Pirata One
-                                    </option>
-                                    <option value="Butcherman">
-                                        Butcherman
-                                    </option>
-                                    <option value="Rye">Rye</option>
-                                    <option value="Rubik Beastly">
-                                        Rubik Beastly
-                                    </option>
-                                    <option value="Rubik Bubbles">
-                                        Rubik Bubbles
-                                    </option>
-                                    <option value="Rubik Dirt">
-                                        Rubik Dirt
-                                    </option>
-                                    <option value="Rubik Glitch">
-                                        Rubik Glitch
-                                    </option>
-                                    <option value="Rubik Moonrocks">
-                                        Rubik Moonrocks
-                                    </option>
-                                    <option value="Rubik Pixels">
-                                        Rubik Pixels
-                                    </option>
-                                    <option value="Monoton">Monoton</option>
-                                    <option value="Special Elite">
-                                        Special Elite
-                                    </option>
-                                    <option value="Germania One">
-                                        Germania One
-                                    </option>
-                                </optgroup>
-                            </select>
+                            <div class="section-header"><span class="section-title">Tamaño</span><span class="section-value" id="sizeVal">20px</span></div>
+                            <input id="sizeRange" type="range" min="14" max="48" value="20" class="range-styled" />
                         </div>
                         <div class="section-block">
-                            <div class="section-header">
-                                <span class="section-title">Tamaño</span>
-                                <span class="section-value" id="sizeVal"
-                                    >20px</span
-                                >
-                            </div>
-                            <input
-                                id="sizeRange"
-                                type="range"
-                                min="14"
-                                max="48"
-                                value="20"
-                                class="range-styled"
-                            />
-                        </div>
-                        <div class="section-block">
-                            <div class="section-header">
-                                <span class="section-title">Alineación</span>
-                            </div>
+                            <div class="section-header"><span class="section-title">Alineación</span></div>
                             <div class="align-group" id="alignGroup">
-                                <button
-                                    class="align-btn active"
-                                    id="alignCenter"
-                                    data-align="center"
-                                    title="Centrado"
-                                >
-                                    <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2.5"
-                                        stroke-linecap="round"
-                                    >
-                                        <line x1="3" y1="6" x2="21" y2="6" />
-                                        <line x1="6" y1="12" x2="18" y2="12" />
-                                        <line x1="3" y1="18" x2="21" y2="18" />
-                                    </svg>
-                                </button>
-                                <button
-                                    class="align-btn"
-                                    id="alignLeft"
-                                    data-align="left"
-                                    title="Izquierda"
-                                >
-                                    <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2.5"
-                                        stroke-linecap="round"
-                                    >
-                                        <line x1="3" y1="6" x2="21" y2="6" />
-                                        <line x1="3" y1="12" x2="15" y2="12" />
-                                        <line x1="3" y1="18" x2="18" y2="18" />
-                                    </svg>
-                                </button>
-                                <button
-                                    class="align-btn"
-                                    id="alignRight"
-                                    data-align="right"
-                                    title="Derecha"
-                                >
-                                    <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2.5"
-                                        stroke-linecap="round"
-                                    >
-                                        <line x1="3" y1="6" x2="21" y2="6" />
-                                        <line x1="9" y1="12" x2="21" y2="12" />
-                                        <line x1="6" y1="18" x2="21" y2="18" />
-                                    </svg>
-                                </button>
+                                <button class="align-btn active" id="alignCenter" data-align="center" title="Centrado"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="6" y1="12" x2="18" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg></button>
+                                <button class="align-btn" id="alignLeft" data-align="left" title="Izquierda"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="18" y2="18" /></svg></button>
+                                <button class="align-btn" id="alignRight" data-align="right" title="Derecha"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="9" y1="12" x2="21" y2="12" /><line x1="6" y1="18" x2="21" y2="18" /></svg></button>
                             </div>
                         </div>
                     </div>
@@ -3565,104 +3182,25 @@
                     <!-- TAB: Media -->
                     <div class="tab-content" id="tab-media">
                         <div class="section-block">
-                            <div class="section-header">
-                                <span class="section-badge">IMG</span>
-                                <span class="section-title"
-                                    >Imagen en video</span
-                                >
-                            </div>
-                            <p class="section-desc">
-                                Sube una imagen, arrástrala y ajusta su tamaño
-                                en el video.
-                            </p>
+                            <div class="section-header"><span class="section-badge">IMG</span><span class="section-title">Imagen en video</span></div>
+                            <p class="section-desc">Sube una imagen, arrástrala y ajusta su tamaño en el video.</p>
                             <div class="row" style="gap: 8px">
-                                <label
-                                    class="drop-btn"
-                                    for="overlayImgInput"
-                                    style="flex: 1; justify-content: center"
-                                >
-                                    <svg
-                                        width="13"
-                                        height="13"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2.5"
-                                    >
-                                        <rect
-                                            x="3"
-                                            y="3"
-                                            width="18"
-                                            height="18"
-                                            rx="2"
-                                        />
-                                        <circle cx="8.5" cy="8.5" r="1.5" />
-                                        <polyline points="21 15 16 10 5 21" />
-                                    </svg>
-                                    Subir imagen
-                                </label>
-                                <input
-                                    type="file"
-                                    id="overlayImgInput"
-                                    accept="image/*"
-                                    style="display: none"
-                                />
-                                <button
-                                    class="btn-action ghost-action"
-                                    id="removeOverlayBtn"
-                                >
-                                    ✕ Quitar
-                                </button>
+                                <label class="drop-btn" for="overlayImgInput" style="flex: 1; justify-content: center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg> Subir imagen</label>
+                                <input type="file" id="overlayImgInput" accept="image/*" style="display: none" />
+                                <button class="btn-action ghost-action" id="removeOverlayBtn">✕ Quitar</button>
                             </div>
                         </div>
                         <div class="section-block">
-                            <div class="section-header">
-                                <span class="section-title">Estado</span>
-                            </div>
-                            <div class="status-bar" id="status2">
-                                <span class="status-dot"></span>
-                                Esperando video...
-                            </div>
-                            <div class="footer-info" style="margin-top: 8px">
-                                <div
-                                    class="small"
-                                    id="transcriptPreview2"
-                                ></div>
-                            </div>
+                            <div class="section-header"><span class="section-title">Estado</span></div>
+                            <div class="status-bar" id="status2"><span class="status-dot"></span> Esperando video...</div>
+                            <div class="footer-info" style="margin-top: 8px"><div class="small" id="transcriptPreview2"></div></div>
                         </div>
                     </div>
-
                     </div>
 
                     <div class="editor-left-footer">
-                        <div style="margin-bottom: 12px;">
-                            <label style="font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 6px;">Calidad:</label>
-                            <select id="qualitySelect" class="select-styled" style="width: 100%;">
-                                <option value="720p">📱 720p - Recomendado</option>
-                                <option value="1080p">🎬 1080p - Alta</option>
-                                <option value="480p">📲 480p - Rápido</option>
-                            </select>
-                        </div>
-                        <button
-                            class="btn-action primary-action download-btn"
-                            id="downloadBtn"
-                            disabled
-                        >
-                            <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.5"
-                            >
-                                <path
-                                    d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
-                                />
-                                <polyline points="7 10 12 15 17 10" />
-                                <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            Descargar Short
+                        <button class="btn-action primary-action download-btn" id="downloadBtn" disabled>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar Short
                         </button>
                     </div>
                 </div>
@@ -3682,25 +3220,11 @@
                     </div>
                     <div class="preview-center">
                         <div class="video-container" id="videoContainer">
-                            <div class="blur-strip blur-top">
-                                <img id="blurTopImg" alt="" />
-                            </div>
-                            <div class="blur-strip blur-bottom">
-                                <img id="blurBottomImg" alt="" />
-                            </div>
-                            <video id="video" playsinline></video>
+                            <canvas id="canvas" width="720" height="1280" style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:5"></canvas>
+                            <video id="video" playsinline style="position:fixed;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none"></video>
                             <div class="overlay-top"></div>
                             <div class="overlay-bottom"></div>
-                            <div
-                                class="subtitles"
-                                id="subtitles"
-                                style="bottom: 36px"
-                            >
-                                <div
-                                    id="subtitle"
-                                    class="subtitle style-1 no-bg"
-                                ></div>
-                            </div>
+                            <div class="subtitles" id="subtitles" style="bottom: 36px"><div id="subtitle" class="subtitle style-1 no-bg"></div></div>
                             <div class="controls-bar" id="controlsBar">
                                 <button class="btn play" id="playBtn">
                                     &#9654;
@@ -3716,32 +3240,8 @@
                     </div>
                     <div class="preview-placeholder" id="previewPlaceholder">
                         <div class="placeholder-icon">
-                            <svg
-                                width="48"
-                                height="48"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="url(#pg1)"
-                                stroke-width="1"
-                            >
-                                <defs>
-                                    <linearGradient
-                                        id="pg1"
-                                        x1="0%"
-                                        y1="0%"
-                                        x2="100%"
-                                        y2="100%"
-                                    >
-                                        <stop
-                                            offset="0%"
-                                            style="stop-color: #7af0c6"
-                                        />
-                                        <stop
-                                            offset="100%"
-                                            style="stop-color: #6ea8ff"
-                                        />
-                                    </linearGradient>
-                                </defs>
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="url(#pg1)" stroke-width="1">
+                                <defs><linearGradient id="pg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color: #7af0c6"/><stop offset="100%" style="stop-color: #6ea8ff"/></linearGradient></defs>
                                 <rect
                                     x="2"
                                     y="2"
@@ -3781,8 +3281,8 @@
                         <div class="ai-clips-meta" id="aiClipsMeta">
                             0 clips encontrados
                         </div>
-                        <button id="resetClipsBtn" style="background: transparent; border: 1px solid var(--border); color: var(--muted); width: auto; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; text-transform: uppercase; font-weight: 600; letter-spacing: 0.3px; display: none;">Restablecer</button>
-                        <button id="closeClipsBtn" style="background: transparent; border: 1px solid var(--border); color: var(--muted); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
+                    <button id="resetClipsBtn" style="background: transparent; border: 1px solid var(--border); color: var(--muted); width: auto; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; display: none; align-items: center; justify-content: center; transition: all 0.2s; text-transform: uppercase; font-weight: 600; letter-spacing: 0.3px;">Restablecer</button>
+                    <button id="closeClipsBtn" style="background: transparent; border: 1px solid var(--border); color: var(--muted); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
                     </div>
                 </div>
                 <div class="ai-clips-carousel" id="aiClipsCarousel"></div>
@@ -3800,12 +3300,17 @@
             const transcriptPreview =
                 document.getElementById("transcriptPreview");
             const videoEl = document.getElementById("video");
-            const blurTopImg = document.getElementById("blurTopImg");
-            const blurBottomImg = document.getElementById("blurBottomImg");
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d", { alpha: false });
+            
+            const BLUR_PX = 120;
+            const STRIP_HEIGHT = Math.round(canvas.height * 0.30);
             const subtitleEl = document.getElementById("subtitle");
+            let raf = null;
+            const CANVAS_W = canvas.width;
+            const CANVAS_H = canvas.height;
             const stylesGrid = document.getElementById("stylesGrid");
             const animList = document.getElementById("animList");
-            const fontSelect = document.getElementById("fontSelect");
             const sizeRange = document.getElementById("sizeRange");
             const alignCenter = document.getElementById("alignCenter");
             const alignLeft = document.getElementById("alignLeft");
@@ -3817,6 +3322,11 @@
             const timeLabel = document.getElementById("timeLabel");
             const subtitlesContainer = document.getElementById("subtitles");
             const downloadBtn = document.getElementById("downloadBtn");
+
+            // Global audio context handling
+            let audioCtx = null;
+            let mediaSourceNode = null;
+            let mediaStreamDestination = null;
 
             let currentStyle = "style-1";
             let currentAnim = "typewriter";
@@ -3859,6 +3369,144 @@
                 statusEl.classList.add("active");
             }
 
+            function startDrawLoop(){
+                if(raf) cancelAnimationFrame(raf);
+                function draw(){
+                    const vw = videoEl.videoWidth;
+                    const vh = videoEl.videoHeight;
+                    if(!vw || !vh){
+                        raf = requestAnimationFrame(draw);
+                        return;
+                    }
+
+                    ctx.clearRect(0,0,CANVAS_W,CANVAS_H);
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+
+                    const scale = CANVAS_W / vw;
+                    const drawW = CANVAS_W;
+                    const drawH = vh * scale;
+                    const dx = 0;
+                    const dy = (CANVAS_H - drawH) / 2;
+
+                    // main video
+                    ctx.filter = 'none';
+                    ctx.drawImage(videoEl, 0, 0, vw, vh, dx, dy, drawW, drawH);
+
+                    // blur strips (exact logic from sample)
+                    const stripH = STRIP_HEIGHT;
+                    const srcStripH = Math.max(1, Math.round(stripH / scale));
+                    
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(0, 0, CANVAS_W, stripH);
+                    ctx.clip();
+                    ctx.filter = `blur(${BLUR_PX}px)`;
+                    ctx.drawImage(videoEl, 0, 0, vw, srcStripH, 0, 0, CANVAS_W, stripH);
+                    ctx.restore();
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(0, CANVAS_H - stripH, CANVAS_W, stripH);
+                    ctx.clip();
+                    ctx.filter = `blur(${BLUR_PX}px)`;
+                    ctx.drawImage(videoEl, 0, Math.max(0, vh - srcStripH), vw, srcStripH, 0, CANVAS_H - stripH, CANVAS_W, stripH);
+                    ctx.restore();
+
+                    ctx.fillStyle = 'rgba(0,0,0,0.04)';
+                    ctx.fillRect(0, 0, CANVAS_W, stripH);
+                    ctx.fillRect(0, CANVAS_H - stripH, CANVAS_W, stripH);
+
+                    // draw subtitles on canvas (for export)
+                    const t = videoEl.currentTime || 0;
+                    for(const s of cues){
+                        if(t >= s.start && t <= s.end){
+                            drawSubtitleOnCanvas(s);
+                        }
+                    }
+
+                    raf = requestAnimationFrame(draw);
+                }
+                draw();
+            }
+
+            /* Draw subtitle directly on canvas (used for export) */
+            function drawSubtitleOnCanvas(s){
+              if (!s || !s.text) return;
+              ctx.save();
+              
+              const fontSize = (parseInt(sizeRange.value) || 20) * 2.2;
+              ctx.font = `900 ${fontSize}px Inter, sans-serif`;
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+
+              const px = CANVAS_W / 2;
+              const py = CANVAS_H - (parseInt(vPos.value) * (CANVAS_H / 520) || 100);
+
+              let textColor = '#fff';
+              if (currentEmphColor) textColor = currentEmphColor;
+
+              const lines = wrapTextLines(s.text, CANVAS_W * 0.85);
+              const maxLineWidth = Math.max(...lines.map(l => ctx.measureText(l).width));
+              const boxW = maxLineWidth + 40;
+              const boxH = lines.length * (fontSize * 1.1) + 20;
+              
+              // Fondo
+              ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
+              roundRect(ctx, px - boxW/2, py - boxH/2, boxW, boxH, 15);
+              ctx.fill();
+
+              // Texto con borde
+              ctx.lineWidth = 8;
+              ctx.strokeStyle = "rgba(0,0,0,0.8)";
+              if(!currentEmphGlow){
+                ctx.shadowColor = 'rgba(0,0,0,0.6)';
+                ctx.shadowBlur = 12;
+                ctx.shadowOffsetY = 4;
+              } else {
+                ctx.shadowColor = currentEmphGlow;
+                ctx.shadowBlur = 15;
+              }
+
+              ctx.fillStyle = textColor;
+              const lineHeight = fontSize * 1.05;
+              for(let i=0;i<lines.length;i++){
+                const ly = py - (lines.length-1)/2 * lineHeight + i * lineHeight;
+                ctx.strokeText(lines[i], px, ly);
+                ctx.fillText(lines[i], px, ly);
+              }
+
+              ctx.restore();
+            }
+
+            /* Text helpers */
+            function roundRect(ctx,x,y,w,h,r){
+              ctx.beginPath();
+              ctx.moveTo(x+r,y);
+              ctx.arcTo(x+w,y,x+w,y+h,r);
+              ctx.arcTo(x+w,y+h,x,y+h,r);
+              ctx.arcTo(x,y+h,x,y,r);
+              ctx.arcTo(x,y,x+w,y,r);
+              ctx.closePath();
+            }
+            function wrapTextLines(text, maxWidth){
+              const words = text.split(/\s+/);
+              const lines = [];
+              let cur = '';
+              for(const w of words){
+                const test = cur ? cur + ' ' + w : w;
+                const width = ctx.measureText(test).width;
+                if(width > maxWidth && cur){
+                  lines.push(cur);
+                  cur = w;
+                } else {
+                  cur = test;
+                }
+              }
+              if(cur) lines.push(cur);
+              return lines;
+            }
+
             async function triggerFileLoad(file) {
                 lastLoadedFile = file;
                 showFileInfo(file);
@@ -3879,9 +3527,6 @@
                 lastCueIndex = -1;
                 subtitleEl.textContent = "";
                 
-                // Don't wait for drawFirstFrameToImages - run in parallel
-                drawFirstFrameToImages(url).catch(err => console.warn("Frame capture error:", err));
-                
                 // Handle metadata loading
                 const handleMetadata = () => {
                     videoDuration = videoEl.duration || 0;
@@ -3890,13 +3535,15 @@
                     downloadBtn.disabled = false;
                     downloadBtn.style.opacity = "1";
                     updateStatus("Video listo. Haz clic en Play para reproducir.", true);
+                    
+                    startDrawLoop();
                 };
                 
                 // Remove any existing listener
                 videoEl.removeEventListener("loadedmetadata", handleMetadata);
                 videoEl.addEventListener("loadedmetadata", handleMetadata, { once: true });
                 
-                // Fallback: if loadedmetadata doesn't fire in 4 seconds, try anyway
+                // Fallback
                 setTimeout(() => {
                     if (videoDuration === 0 && videoEl.duration > 0) {
                         videoDuration = videoEl.duration;
@@ -4085,11 +3732,6 @@
                 currentAnim = chip.dataset.anim;
             });
 
-            fontSelect.addEventListener(
-                "change",
-                () => (subtitleEl.style.fontFamily = fontSelect.value),
-            );
-
             function setAlignment(a) {
                 subtitleEl.style.textAlign = a;
                 if (a === "left") {
@@ -4129,54 +3771,6 @@
                 if (!f) return;
                 triggerFileLoad(f);
             });
-
-            async function drawFirstFrameToImages(videoUrl) {
-                return new Promise((resolve) => {
-                    const v = document.createElement("video");
-                    v.src = videoUrl;
-                    v.muted = true;
-                    v.playsInline = true;
-                    v.crossOrigin = "anonymous";
-                    v.addEventListener(
-                        "loadeddata",
-                        () => {
-                            v.currentTime = Math.min(0.05, v.duration || 0.05);
-                        },
-                        { once: true },
-                    );
-                    v.addEventListener(
-                        "seeked",
-                        () => {
-                            try {
-                                const cw = 420,
-                                    ch = 740;
-                                const c = document.createElement("canvas");
-                                c.width = cw;
-                                c.height = ch;
-                                const ctx = c.getContext("2d");
-                                const vw = v.videoWidth,
-                                    vh = v.videoHeight;
-                                const scale = Math.max(cw / vw, ch / vh);
-                                const dw = vw * scale,
-                                    dh = vh * scale;
-                                const dx = (cw - dw) / 2,
-                                    dy = (ch - dh) / 2;
-                                ctx.drawImage(v, dx, dy, dw, dh);
-                                const dataUrl = c.toDataURL("image/jpeg", 0.8);
-                                blurTopImg.src = dataUrl;
-                                blurBottomImg.src = dataUrl;
-                            } catch (err) {
-                                console.warn("Canvas draw error", err);
-                            }
-                            v.pause();
-                            v.src = "";
-                            resolve();
-                        },
-                        { once: true },
-                    );
-                    setTimeout(() => resolve(), 900);
-                });
-            }
 
             transcribeBtn.addEventListener("click", async () => {
                 const file = fileInput.files[0] || lastLoadedFile;
@@ -4337,6 +3931,10 @@
                     if (videoEl.currentTime >= selectedClip.end) {
                         videoEl.currentTime = selectedClip.end;
                         videoEl.pause();
+                    }
+                    // Forzar que el preview no retroceda antes del inicio del clip
+                    if (videoEl.currentTime < selectedClip.start) {
+                        videoEl.currentTime = selectedClip.start;
                     }
                 }
                 
@@ -4536,13 +4134,11 @@
 
             function renderCueText(text, start, end) {
                 clearTyping();
-                subtitleEl.className = "subtitle " + currentStyle;
-                subtitleEl.style.fontFamily = fontSelect.value;
+                subtitleEl.className = "subtitle " + currentStyle + (noBgStyles.has(parseInt(currentStyle.replace('style-',''))) ? " no-bg" : "");
                 subtitleEl.style.fontSize = sizeRange.value + "px";
                 const parsed = parseMarkupAndEmphasis(text);
-                if (currentAnim === "typewriter") {
-                    typeText(parsed, start, end);
-                } else {
+                if (currentAnim === "typewriter") typeText(parsed, start, end);
+                else {
                     subtitleEl.innerHTML = parsedToHTML(parsed);
                     subtitleEl.classList.add("show");
                     subtitleEl.querySelectorAll(".word").forEach((w, i) => {
@@ -4569,8 +4165,7 @@
 
             function renderCueWithWords(cue) {
                 clearTyping();
-                subtitleEl.className = "subtitle " + currentStyle;
-                subtitleEl.style.fontFamily = fontSelect.value;
+                subtitleEl.className = "subtitle " + currentStyle + (noBgStyles.has(parseInt(currentStyle.replace('style-',''))) ? " no-bg" : "");
                 subtitleEl.style.fontSize = sizeRange.value + "px";
                 subtitleEl.innerHTML = "";
                 const container = document.createElement("div");
@@ -4981,7 +4576,6 @@
             // Cerrar sección de clips
             closeClipsBtn.addEventListener("click", () => {
                 aiClipsSection.style.display = "none";
-                resetClipsPanel();
                 aiSplitBtn.innerHTML = '← Abrir panel de clips';
                 aiSplitBtn.disabled = false;
             });
@@ -5244,295 +4838,132 @@
 
             /* ── Download button ── */
             let isRecording = false;
-            const qualitySelect = document.getElementById("qualitySelect");
+            let exportRecorder = null;
+            let exportChunks = [];
+            let combinedStream = null;
 
-            const qualitySettings = {
-                "480p": { width: 540, height: 960, bitrate: "1500k", fps: 24 },
-                "720p": { width: 810, height: 1440, bitrate: "3000k", fps: 30 },
-                "1080p": { width: 1080, height: 1920, bitrate: "6000k", fps: 30 }
-            };
+            downloadBtn.addEventListener("click", async () => {
+                if (!videoEl.src) { alert("Carga un video primero"); return; }
+                if (isRecording) { alert("Descarga en progreso..."); return; }
 
-            async function recordVideoWithEffects() {
+                // DETERMINAR RANGO: Si hay un clip activo, solo descargamos ese rango
+                const startTime = isViewingClip && selectedClip ? selectedClip.start : 0;
+                const endTime = isViewingClip && selectedClip ? selectedClip.end : videoDuration;
+
+                // Ocultar subtítulos HTML para la grabación (drawSubtitleOnCanvas ya los dibuja)
+                subtitleEl.style.visibility = "hidden";
+
                 isRecording = true;
                 downloadBtn.disabled = true;
-                const quality = qualitySelect.value || "720p";
-                const settings = qualitySettings[quality];
-
                 downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Procesando...';
 
                 try {
-                    // Crear canvas para capturar el video
-                    const canvas = document.createElement("canvas");
-                    canvas.width = settings.width;
-                    canvas.height = settings.height;
-                    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-
-                    // Canvas para captura como stream
-                    let stream = canvas.captureStream(settings.fps);
-                    
-                    // Capturar audio del video original
-                    let audioTracks = [];
-                    try {
-                        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                        const source = audioContext.createMediaElementAudioSource(videoEl);
-                        const destination = audioContext.createMediaStreamDestination();
-                        source.connect(destination);
-                        audioTracks = destination.stream.getAudioTracks();
-                        
-                        if (audioTracks.length > 0) {
-                            audioTracks.forEach(track => stream.addTrack(track));
-                        }
-                    } catch (e) {
-                        console.warn("Audio context: ", e);
-                    }
-
-                    // Intentar usar MP4 directamente si está disponible
-                    let mimeType = "video/mp4";
-                    if (!MediaRecorder.isTypeSupported("video/mp4")) {
-                        mimeType = "video/webm;codecs=vp8";
-                        if (!MediaRecorder.isTypeSupported(mimeType)) {
-                            mimeType = "video/webm";
-                        }
-                    }
-
-                    const recordedChunks = [];
-                    const mediaRecorder = new MediaRecorder(stream, { 
-                        mimeType,
-                        videoBitsPerSecond: parseInt(settings.bitrate) * 1000
-                    });
-
-                    mediaRecorder.onerror = (event) => {
-                        console.error("Error:", event.error);
-                        alert("Error en grabación: " + event.error);
-                        cleanupDownload();
-                    };
-
-                    mediaRecorder.ondataavailable = (e) => {
-                        if (e.data.size > 0) recordedChunks.push(e.data);
-                    };
-
-                    let conversionComplete = false;
-                    
-                    mediaRecorder.onstop = async () => {
-                        if (conversionComplete) return;
-                        conversionComplete = true;
-                        
-                        try {
-                            const blob = new Blob(recordedChunks, { type: mimeType });
-                            
-                            // Si ya es MP4, descargar directamente
-                            if (blob.type === "video/mp4" || blob.type.includes("mp4")) {
-                                downloadVideo(blob, quality);
-                            } 
-                            // Si es WebM, convertir a MP4
-                            else if (window.FFmpeg) {
-                                downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Convirtiendo a MP4...';
-                                
-                                try {
-                                    const { FFmpeg, fetchFile } = window.FFmpeg;
-                                    const ffmpeg = new FFmpeg.FFmpeg();
-                                    
-                                    if (!ffmpeg.isLoaded()) {
-                                        await ffmpeg.load();
-                                    }
-
-                                    // Escribir archivo temporal
-                                    ffmpeg.FS('writeFile', 'input.webm', new Uint8Array(await blob.arrayBuffer()));
-
-                                    // Convertir a MP4
-                                    await ffmpeg.run(
-                                        '-i', 'input.webm',
-                                        '-c:v', 'libx264',
-                                        '-preset', 'fast',
-                                        '-crf', '20',
-                                        '-c:a', 'aac',
-                                        '-b:a', '192k',
-                                        '-movflags', '+faststart',
-                                        'output.mp4'
-                                    );
-
-                                    const data = ffmpeg.FS('readFile', 'output.mp4');
-                                    const mp4Blob = new Blob([data.buffer], { type: 'video/mp4' });
-
-                                    ffmpeg.FS('unlink', 'input.webm');
-                                    ffmpeg.FS('unlink', 'output.mp4');
-
-                                    downloadVideo(mp4Blob, quality);
-                                } catch (ffmpegErr) {
-                                    console.warn("FFmpeg conversion failed, descargando como WebM:", ffmpegErr);
-                                    downloadVideo(blob, quality);
-                                }
-                            } 
-                            else {
-                                // Si no hay FFmpeg, descargar el blob tal cual
-                                downloadVideo(blob, quality);
-                            }
-                        } catch (err) {
-                            console.error("Error en descarga:", err);
-                            alert("Error: " + err.message);
-                            cleanupDownload();
-                        }
-                    };
-
-                    mediaRecorder.start();
-                    videoEl.currentTime = 0;
+                    videoEl.currentTime = startTime;
                     await videoEl.play().catch(err => console.warn("Play:", err));
 
-                    let isCapturing = true;
-                    const frameTime = 1000 / settings.fps;
-                    let lastFrameTime = 0;
-
-                    const captureFrame = (timestamp) => {
-                        try {
-                            if (!isCapturing || !videoEl.src) return;
-
-                            if (timestamp - lastFrameTime < frameTime) {
-                                requestAnimationFrame(captureFrame);
-                                return;
-                            }
-                            lastFrameTime = timestamp;
-
-                            ctx.clearRect(0, 0, canvas.width, canvas.height);
-                            ctx.fillStyle = "#000";
-                            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                            // Dibujar video
-                            try {
-                                ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
-                            } catch (e) {
-                                console.warn("Error drawing video:", e);
-                            }
-
-                            // Dibujar blur effects
-                            const blurTopImg = document.getElementById("blurTopImg");
-                            const blurBottomImg = document.getElementById("blurBottomImg");
-
-                            if (blurTopImg && blurTopImg.src) {
-                                ctx.save();
-                                ctx.globalAlpha = 0.3;
-                                ctx.drawImage(blurTopImg, 0, 0, canvas.width, canvas.height * 0.08);
-                                ctx.restore();
-                            }
-
-                            if (blurBottomImg && blurBottomImg.src) {
-                                ctx.save();
-                                ctx.globalAlpha = 0.3;
-                                ctx.drawImage(blurBottomImg, 0, canvas.height * 0.92, canvas.width, canvas.height * 0.08);
-                                ctx.restore();
-                            }
-
-                            // Dibujar subtítulos
-                            const subtitleEl = document.getElementById("subtitle");
-                            if (subtitleEl && subtitleEl.textContent.trim()) {
-                                const fontSize = (parseInt(subtitleEl.style.fontSize) || 36) * (settings.height / 1920);
-                                const fontFamily = subtitleEl.style.fontFamily || "Inter";
-
-                                ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-                                ctx.fillRect(0, canvas.height - (250 * (settings.height / 1920)), canvas.width, 200 * (settings.height / 1920));
-
-                                ctx.font = `bold ${fontSize}px ${fontFamily}`;
-                                ctx.fillStyle = subtitleEl.style.color || "#ffffff";
-                                ctx.textAlign = "center";
-                                ctx.textBaseline = "bottom";
-                                ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
-                                ctx.shadowBlur = 4;
-                                ctx.shadowOffsetY = 2;
-
-                                ctx.fillText(subtitleEl.textContent, canvas.width / 2, canvas.height - (60 * (settings.height / 1920)));
-                                ctx.shadowColor = "transparent";
-                            }
-
-                            // Dibujar overlays
-                            const videoContainer = document.getElementById("videoContainer");
-                            if (videoContainer) {
-                                const overlays = videoContainer.querySelectorAll(".overlay-img-wrap img");
-                                overlays.forEach((img) => {
-                                    if (img && img.complete && img.src) {
-                                        try {
-                                            const wrapper = img.closest(".overlay-img-wrap");
-                                            if (wrapper) {
-                                                const scale = settings.width / 1080;
-                                                const left = parseInt(wrapper.style.left) * scale;
-                                                const top = parseInt(wrapper.style.top) * scale;
-                                                const width = parseInt(wrapper.style.width) * scale;
-                                                const height = parseInt(wrapper.style.height) * scale;
-                                                ctx.drawImage(img, left, top, width, height);
-                                            }
-                                        } catch (e) {
-                                            console.warn("Error en overlay:", e);
-                                        }
-                                    }
-                                });
-                            }
-
-                            if (videoEl.ended) {
-                                isCapturing = false;
-                                mediaRecorder.stop();
-                                return;
-                            }
-
-                            requestAnimationFrame(captureFrame);
-                        } catch (err) {
-                            console.error("Error capturando frame:", err);
-                            isCapturing = false;
-                            mediaRecorder.stop();
+                    const vStream = canvas.captureStream(30);
+                    let audioTracks = [];
+                    
+                    // Capturar audio de forma robusta
+                    try {
+                        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        if (audioCtx.state === 'suspended') await audioCtx.resume();
+                        
+                        if (!mediaSourceNode) {
+                            mediaSourceNode = audioCtx.createMediaElementSource(videoEl);
+                            mediaStreamDestination = audioCtx.createMediaStreamDestination();
+                            mediaSourceNode.connect(mediaStreamDestination);
+                            mediaSourceNode.connect(audioCtx.destination);
                         }
+                        audioTracks = mediaStreamDestination.stream.getAudioTracks();
+                    } catch(e){ console.warn("Audio Context:", e); }
+
+                    combinedStream = new MediaStream();
+                    vStream.getVideoTracks().forEach(t => combinedStream.addTrack(t));
+                    audioTracks.forEach(t => combinedStream.addTrack(t));
+
+                    exportChunks = [];
+                    let options = { mimeType: 'video/webm;codecs=vp8,opus' };
+                    if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'video/webm' };
+                    
+                    try {
+                        exportRecorder = new MediaRecorder(combinedStream, options);
+                    } catch(e){
+                        try { exportRecorder = new MediaRecorder(combinedStream); } catch(err){
+                            statusEl.textContent = 'Error: MediaRecorder no soportado para este stream.';
+                            cleanupDownload(); return;
+                        }
+                    }
+
+                    exportRecorder.ondataavailable = (ev) => {
+                        if(ev.data && ev.data.size > 0) exportChunks.push(ev.data);
+                    };
+                    exportRecorder.onstop = () => {
+                        processToMp4(exportChunks);
+                        if(combinedStream) combinedStream.getTracks().forEach(t=>t.stop());
                     };
 
-                    requestAnimationFrame(captureFrame);
-
-                    // Timeout de seguridad
-                    setTimeout(() => {
-                        if (isCapturing) {
-                            isCapturing = false;
-                            mediaRecorder.stop();
+                    const checkEnd = setInterval(() => {
+                        if (videoEl.currentTime >= endTime || videoEl.currentTime >= videoDuration || videoEl.ended) {
+                            clearInterval(checkEnd);
+                            if (exportRecorder && exportRecorder.state === 'recording') {
+                                exportRecorder.stop();
+                                videoEl.pause();
+                            }
                         }
-                    }, (videoDuration + 10) * 1000);
+                    }, 100);
+
+                    async function processToMp4(recordedChunks) {
+                        downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Convirtiendo a MP4...';
+                        const webmBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                        
+                        if (window.FFmpeg) {
+                            try {
+                                const { FFmpeg } = window.FFmpeg;
+                                const ffmpeg = new FFmpeg();
+                                await ffmpeg.load();
+                                await ffmpeg.writeFile('input.webm', new Uint8Array(await webmBlob.arrayBuffer()));
+                                await ffmpeg.exec(['-i', 'input.webm', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-c:a', 'copy', '-movflags', '+faststart', 'output.mp4']);
+                                const data = await ffmpeg.readFile('output.mp4');
+                                downloadBlob(new Blob([data.buffer], { type: 'video/mp4' }), 'mp4');
+                            } catch (e) {
+                                console.warn("FFmpeg falló, bajando WebM:", e);
+                                downloadBlob(webmBlob, 'webm');
+                            }
+                        } else {
+                            downloadBlob(webmBlob, 'webm');
+                        }
+                        cleanupDownload();
+                    }
+
+                    function downloadBlob(blob, ext) {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `ediclip_${isViewingClip ? 'short' : 'full'}_${Date.now()}.${ext}`;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        setTimeout(() => URL.revokeObjectURL(url), 2000);
+                    }
+
+                    exportRecorder.start();
+                    updateStatus('Exportando video...', true);
 
                 } catch (error) {
                     console.error("Error descargando:", error);
                     alert("Error: " + error.message);
                     cleanupDownload();
                 }
-            }
-
-            function downloadVideo(blob, quality) {
-                let filename = `short_editado_${quality}.mp4`;
-                if (blob.type && blob.type.includes("webm")) {
-                    filename = `short_editado_${quality}.webm`;
-                }
-                
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-
-                setTimeout(() => {
-                    URL.revokeObjectURL(url);
-                    cleanupDownload();
-                }, 500);
-            }
+            });
 
             function cleanupDownload() {
                 isRecording = false;
-                downloadBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg> Descargar';
+                subtitleEl.style.visibility = "visible";
+                downloadBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar Short';
                 downloadBtn.disabled = false;
+                if(audioCtx && audioCtx.state !== 'closed') { try { audioCtx.close(); } catch(e){} audioCtx = null; }
             }
-
-            downloadBtn.addEventListener("click", () => {
-                if (!videoEl.src) {
-                    alert("Carga un video primero");
-                    return;
-                }
-                if (isRecording) {
-                    alert("Descarga en progreso...");
-                    return;
-                }
-                recordVideoWithEffects();
-            });
         </script>
     </body>
 </html>
