@@ -3781,6 +3781,7 @@
                         <div class="ai-clips-meta" id="aiClipsMeta">
                             0 clips encontrados
                         </div>
+                        <button id="resetClipsBtn" style="background: transparent; border: 1px solid var(--border); color: var(--muted); width: auto; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; text-transform: uppercase; font-weight: 600; letter-spacing: 0.3px; display: none;">Restablecer</button>
                         <button id="closeClipsBtn" style="background: transparent; border: 1px solid var(--border); color: var(--muted); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
                     </div>
                 </div>
@@ -4329,6 +4330,16 @@
 
             videoEl.addEventListener("timeupdate", () => {
                 updateProgress();
+                updateTimeLabel();
+                
+                // Si estamos viendo un clip, limitar la reproducción al final del clip
+                if (isViewingClip && selectedClip) {
+                    if (videoEl.currentTime >= selectedClip.end) {
+                        videoEl.currentTime = selectedClip.end;
+                        videoEl.pause();
+                    }
+                }
+                
                 if (!cues || cues.length === 0) return;
                 const t = videoEl.currentTime;
                 const idx = cues.findIndex((c) => t >= c.start && t <= c.end);
@@ -4864,19 +4875,41 @@
             progress.addEventListener("click", (e) => {
                 const rect = progress.getBoundingClientRect();
                 const pct = (e.clientX - rect.left) / rect.width;
-                videoEl.currentTime = pct * videoDuration;
+                
+                if (isViewingClip && selectedClip) {
+                    // Si estamos viendo un clip, calcular dentro del rango del clip
+                    videoEl.currentTime = selectedClip.start + pct * selectedClip.dur;
+                } else {
+                    // Si es el video completo, calcular normalmente
+                    videoEl.currentTime = pct * videoDuration;
+                }
             });
 
             function updateProgress() {
-                const d = videoDuration || 1;
-                const t = videoEl.currentTime || 0;
+                let d = videoDuration || 1;
+                let t = videoEl.currentTime || 0;
+                
+                if (isViewingClip && selectedClip) {
+                    // Si estamos viendo un clip, calcular el progreso relativo al clip
+                    d = selectedClip.dur;
+                    t = Math.max(0, videoEl.currentTime - selectedClip.start);
+                }
+                
                 const pct = (t / d) * 100;
                 progressBar.style.width = pct + "%";
             }
 
             function updateTimeLabel() {
-                const d = videoDuration || 0;
-                const t = videoEl.currentTime || 0;
+                let d = videoDuration || 0;
+                let t = videoEl.currentTime || 0;
+                
+                // Si estamos viendo un clip, mostrar tiempo relativo al clip
+                if (isViewingClip && selectedClip) {
+                    d = selectedClip.dur;
+                    t = videoEl.currentTime - selectedClip.start;
+                    t = Math.max(0, t); // Asegurar que no sea negativo
+                }
+                
                 timeLabel.textContent = formatTime(t) + " / " + formatTime(d);
             }
 
@@ -4897,6 +4930,11 @@
             const aiClipsMeta = document.getElementById("aiClipsMeta");
             const aiClipsSection = document.getElementById("aiClipsSection");
             const closeClipsBtn = document.getElementById("closeClipsBtn");
+            const resetClipsBtn = document.getElementById("resetClipsBtn");
+            
+            // Variables globales para rastrear clips
+            let selectedClip = null;
+            let isViewingClip = false;
 
             // Generar miniatura de video en un punto específico
             function getVideoThumbnail(videoUrl, timeInSeconds) {
@@ -4943,9 +4981,34 @@
             // Cerrar sección de clips
             closeClipsBtn.addEventListener("click", () => {
                 aiClipsSection.style.display = "none";
+                resetClipsPanel();
+                aiSplitBtn.innerHTML = '← Abrir panel de clips';
+                aiSplitBtn.disabled = false;
+            });
+            
+            // Función para restablecer el panel de clips
+            function resetClipsPanel() {
+                document.querySelectorAll(".clip-card").forEach(c => c.classList.remove("selected"));
+                selectedClip = null;
+                isViewingClip = false;
+                resetClipsBtn.style.display = "none";
+                videoEl.currentTime = 0;
+                updateProgress();
+                updateTimeLabel();
+            }
+            
+            // Botón Restablecer dentro del panel
+            resetClipsBtn.addEventListener("click", () => {
+                resetClipsPanel();
             });
 
             aiSplitBtn.addEventListener("click", async () => {
+                // Si el botón dice "Abrir panel de clips", simplemente abrir el panel
+                if (aiSplitBtn.innerHTML.includes("Abrir panel")) {
+                    aiClipsSection.style.display = "block";
+                    return;
+                }
+                
                 if (!videoEl.src || !videoDuration) {
                     alert("Carga un video primero.");
                     return;
@@ -5048,6 +5111,15 @@
                             .querySelectorAll(".clip-card")
                             .forEach((c) => c.classList.remove("selected"));
                         card.classList.add("selected");
+                        
+                        // Guardar el clip seleccionado
+                        selectedClip = clip;
+                        isViewingClip = true;
+                        
+                        // Mostrar botón Restablecer
+                        resetClipsBtn.style.display = "flex";
+                        
+                        // Iniciar reproducción desde el inicio del clip
                         videoEl.currentTime = clip.start;
                         videoEl.play();
                     });
