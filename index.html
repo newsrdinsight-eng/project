@@ -3412,16 +3412,19 @@
                     ctx.filter = `blur(${BLUR_PX}px)`;
                     ctx.drawImage(videoEl, 0, Math.max(0, vh - srcStripH), vw, srcStripH, 0, CANVAS_H - stripH, CANVAS_W, stripH);
                     ctx.restore();
+                    ctx.filter = 'none';
 
                     ctx.fillStyle = 'rgba(0,0,0,0.04)';
                     ctx.fillRect(0, 0, CANVAS_W, stripH);
                     ctx.fillRect(0, CANVAS_H - stripH, CANVAS_W, stripH);
 
-                    // draw subtitles on canvas (for export)
-                    const t = videoEl.currentTime || 0;
-                    for(const s of cues){
-                        if(t >= s.start && t <= s.end){
-                            drawSubtitleOnCanvas(s);
+                    // draw subtitles on canvas (only during export to avoid duplicates in preview)
+                    if (isRecording) {
+                        const t = videoEl.currentTime || 0;
+                        for(const s of cues){
+                            if(t >= s.start && t <= s.end){
+                                drawSubtitleOnCanvas(s);
+                            }
                         }
                     }
 
@@ -3432,55 +3435,174 @@
 
             /* Draw subtitle directly on canvas (used for export) */
             function drawSubtitleOnCanvas(s){
-              if (!s || !s.text) return;
-              ctx.save();
+              if (!s || (!s.text && !s.words)) return;
               
-              const fontSize = (parseInt(sizeRange.value) || 20) * 2.2;
-              ctx.font = `900 ${fontSize}px Inter, sans-serif`;
-              ctx.textAlign = "center";
+              // Resolvedor de estilos para que el Canvas coincida 1:1 con las 100 plantillas CSS
+              const getStyleConfig = (id) => {
+                  let cfg = { bg: "rgba(0, 0, 0, 0.6)", text: "#ffffff", grad: null, radius: 15, paddingX: 30, paddingY: 15 };
+                  
+                  if ([1, 5, 9, 16, 27].includes(id)) cfg.bg = null;
+                  if ([2, 7, 12, 17, 21, 23, 29, 39, 47, 63, 71].includes(id)) cfg.text = "#111111";
+                  if ([4, 7, 14, 25, 26, 34, 45, 50, 55, 60, 74, 99].includes(id)) cfg.radius = 999;
+
+                  if (id === 2) cfg.bg = "#fff0a8";
+                  else if ([6, 32, 46, 51, 59, 69, 78, 92].includes(id)) cfg.bg = "#ef4444";
+                  else if (id === 7) cfg.bg = "#a7f3d0";
+                  else if ([11, 33, 57, 76, 94].includes(id)) cfg.bg = "#f97316";
+                  else if (id === 12) cfg.bg = "#93c5fd";
+                  else if ([17, 63, 71].includes(id)) cfg.bg = "#fef08a";
+                  else if ([23, 42, 54, 65, 79, 90, 97].includes(id)) cfg.bg = "#10b981";
+                  else if ([28, 53, 62, 80, 98].includes(id)) cfg.bg = "#7c3aed";
+                  else if ([29, 34, 38, 43, 48, 52, 58, 68, 74, 77, 88, 93].includes(id)) cfg.bg = "#06b6d4";
+                  else if ([39, 73].includes(id)) cfg.bg = "#7dd3fc";
+                  else if ([40, 66, 82, 95].includes(id)) cfg.bg = "#a78bfa";
+                  else if ([41, 67, 83].includes(id)) cfg.bg = "#f472b6";
+                  else if ([47, 87].includes(id)) cfg.bg = "#f59e0b";
+                  else if (id === 86) cfg.bg = "#fb7185";
+                  
+                  if ([4, 20, 30, 49, 60, 99].includes(id)) cfg.grad = ["#06b6d4", "#7c3aed"];
+                  else if ([14, 37, 70].includes(id)) cfg.grad = ["#06b6d4", "#60a5fa"];
+                  else if (id === 24) cfg.grad = ["#ef4444", "#f97316"];
+                  
+                  if (cfg.radius > 100) cfg.paddingX = 45;
+                  return cfg;
+              };
+
+              ctx.save();
+              ctx.filter = 'none';
+              
+              // 1. Configuración de Estilo, Fuente y Alineación
+              const styleId = parseInt(currentStyle.replace('style-', '')) || 1;
+              const cfg = getStyleConfig(styleId);
+              
+              const baseFontSize = (parseInt(sizeRange.value) || 20) * 2.2;
+              const alignment = document.querySelector('.align-btn.active')?.dataset.align || 'center';
+              
+              // Mapeo de fuentes exacto de las plantillas
+              let fontFamily = "Inter, sans-serif";
+              if ([1, 9, 17, 28, 34, 40, 46, 52, 58, 64, 70, 76, 82, 88, 94].includes(styleId)) fontFamily = "Oswald, sans-serif";
+              else if ([2, 7, 13, 18, 23, 29, 35, 41, 47, 53, 59, 65, 71, 77, 83, 89, 95, 100].includes(styleId)) fontFamily = "Poppins, sans-serif";
+              else if ([5, 12, 19, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96].includes(styleId)) fontFamily = "Space Grotesk, sans-serif";
+              else if ([3, 8, 14, 20, 25, 31, 37, 43, 49, 55, 61, 67, 73, 79, 85, 91, 97].includes(styleId)) fontFamily = "Montserrat, sans-serif";
+              else if ([4, 10, 15, 21, 26, 32, 38, 44, 50, 56, 62, 68, 74, 80, 86, 92, 98].includes(styleId)) fontFamily = "Rubik, sans-serif";
+
+              ctx.font = `900 ${baseFontSize}px ${fontFamily}`;
               ctx.textBaseline = "middle";
 
-              const px = CANVAS_W / 2;
+              const t = videoEl.currentTime;
               const py = CANVAS_H - (parseInt(vPos.value) * (CANVAS_H / 520) || 100);
 
-              let textColor = '#fff';
-              if (currentEmphColor) textColor = currentEmphColor;
+              // 2. Procesar palabras y agrupar en líneas para evitar desbordamiento (Ajuste para 9:16)
+              const wordsData = s.words && s.words.length > 0 ? s.words : s.text.split(' ').map((w, i, arr) => ({
+                  word: w,
+                  start: s.start + (i / arr.length) * (s.end - s.start),
+                  end: s.end
+              }));
 
-              const lines = wrapTextLines(s.text, CANVAS_W * 0.85);
-              const maxLineWidth = Math.max(...lines.map(l => ctx.measureText(l).width));
-              const boxW = maxLineWidth + 40;
-              const boxH = lines.length * (fontSize * 1.1) + 20;
-              
-              // Fondo
-              ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
-              roundRect(ctx, px - boxW/2, py - boxH/2, boxW, boxH, 15);
-              ctx.fill();
+              const maxW = CANVAS_W * 0.88; // Margen de seguridad para que no toque los bordes
+              const lines = [];
+              let currentLineWords = [];
+              let curW = 0;
+              const spaceW = ctx.measureText(" ").width;
 
-              // Texto con borde
-              ctx.lineWidth = 8;
-              ctx.strokeStyle = "rgba(0,0,0,0.8)";
-              if(!currentEmphGlow){
-                ctx.shadowColor = 'rgba(0,0,0,0.6)';
-                ctx.shadowBlur = 12;
-                ctx.shadowOffsetY = 4;
-              } else {
-                ctx.shadowColor = currentEmphGlow;
-                ctx.shadowBlur = 15;
-              }
+              wordsData.forEach((w) => {
+                  const wordW = ctx.measureText(w.word.toUpperCase()).width;
+                  if (curW + wordW > maxW && currentLineWords.length > 0) {
+                      lines.push({ words: currentLineWords, width: curW - spaceW });
+                      currentLineWords = [];
+                      curW = 0;
+                  }
+                  currentLineWords.push({ ...w, width: wordW });
+                  curW += wordW + spaceW;
+              });
+              if (currentLineWords.length > 0) lines.push({ words: currentLineWords, width: curW - spaceW });
 
-              ctx.fillStyle = textColor;
-              const lineHeight = fontSize * 1.05;
-              for(let i=0;i<lines.length;i++){
-                const ly = py - (lines.length-1)/2 * lineHeight + i * lineHeight;
-                ctx.strokeText(lines[i], px, ly);
-                ctx.fillText(lines[i], px, ly);
-              }
+              const lineHeight = baseFontSize * 1.4;
 
+              // 3 & 4. Dibujar líneas y palabras individualmente
+              lines.forEach((line, lineIdx) => {
+                  const lineY = py - (lines.length - 1 - lineIdx) * lineHeight;
+                  let lineX;
+                  if (alignment === 'left') lineX = CANVAS_W * 0.06;
+                  else if (alignment === 'right') lineX = CANVAS_W * 0.94 - line.width;
+                  else lineX = (CANVAS_W - line.width) / 2;
+
+                  if (cfg.bg || cfg.grad) {
+                      const boxW = line.width + (cfg.paddingX * 2);
+                      const boxH = baseFontSize * 1.5;
+                      const boxX = lineX - cfg.paddingX;
+                      if (cfg.grad) {
+                          const g = ctx.createLinearGradient(Math.round(boxX), 0, Math.round(boxX + boxW), 0);
+                          g.addColorStop(0, cfg.grad[0]); g.addColorStop(1, cfg.grad[1]);
+                          ctx.fillStyle = g;
+                      } else ctx.fillStyle = cfg.bg;
+                      roundRect(ctx, Math.round(boxX), Math.round(lineY - boxH/2), Math.round(boxW), Math.round(boxH), cfg.radius);
+                      ctx.fill();
+                  }
+
+                  let currentX = lineX;
+                  line.words.forEach((w, i) => {
+                      const wordText = w.word.toUpperCase();
+                      const wordWidth = w.width;
+                      const wordMidX = currentX + wordWidth / 2;
+                      const wordElapsed = t - w.start;
+
+                      if (wordElapsed >= 0) {
+                          ctx.save();
+                          let opacity = 1, scale = 1, yOff = 0, xOff = 0, blur = 0, skew = 0, rotate = 0;
+                          const animDur = 0.32;
+                          const p = Math.min(1, wordElapsed / animDur);
+
+                          if (currentAnim === 'typewriter') { opacity = p; yOff = (1-p)*6; }
+                          else if (currentAnim === 'float') { opacity = p; yOff = p < 0.6 ? (1-p/0.6)*10 : (p-0.6)/0.4*-3; if(p>0.6) yOff = -3 + (p-0.6)/0.4*3; }
+                          else if (currentAnim === 'bounce') {
+                              opacity = p;
+                              if(p<0.6) { scale = (p/0.6)*1.2; yOff = (1-p/0.6)*8; }
+                              else if(p<0.8) { scale = 1.2 - ((p-0.6)/0.2)*0.28; }
+                              else { scale = 0.92 + ((p-0.8)/0.2)*0.08; }
+                          }
+                          else if (currentAnim === 'cinematic') { opacity = p; xOff = (1-p)*-20; skew = (1-p)*6; blur = (1-p)*4; }
+                          else if (currentAnim === 'glitch') { opacity = p; if(p<0.2) xOff = -4; else if(p<0.4) xOff=4; else if(p<0.6) xOff=-2; }
+                          else if (currentAnim === 'neon') { opacity = p; }
+                          else if (currentAnim === 'wave') { opacity = p; yOff = p < 0.7 ? (1-p/0.7)*12 : (p-0.7)/0.3*-2; rotate = (1-p)*-4; }
+                          else if (currentAnim === 'blur-in') { opacity = p; blur = (1-p)*10; scale = 1.08 - (p*0.08); }
+                          else if (currentAnim === 'flip') { rotate = (1-p)*90; opacity = p; }
+                          else if (currentAnim === 'swing') { rotate = p<0.6 ? (1-p/0.6)*-15 : (p-0.6)/0.4*6; opacity = p; }
+                          else if (currentAnim === 'pop') {
+                              opacity = p;
+                              if(p<0.6) scale = (p/0.6)*1.15;
+                              else if(p<0.8) scale = 1.15 - ((p-0.6)/0.2)*0.2;
+                              else scale = 0.95 + ((p-0.8)/0.2)*0.05;
+                          }
+                          else if (currentAnim === 'slide-up') { opacity = p; yOff = (1-p)*20; }
+                          else if (currentAnim === 'slide-left') { opacity = p; xOff = (1-p)*30; }
+                          else if (currentAnim === 'zoom-blur') { scale = 1.6 - (p*0.6); blur = (1-p)*8; opacity = p; }
+
+                          ctx.globalAlpha = opacity;
+                          if (blur > 0) ctx.filter = `blur(${blur}px)`;
+                          ctx.translate(Math.round(wordMidX), Math.round(lineY + yOff));
+                          if (skew !== 0) ctx.transform(1, 0, Math.tan(skew * Math.PI / 180), 1, xOff, 0);
+                          else ctx.translate(xOff, 0);
+                          ctx.scale(scale, scale);
+                          ctx.rotate(rotate * Math.PI / 180);
+
+                          let fill = cfg.text;
+                          const isCap = w.word.length > 3 && w.word[0] === w.word[0].toUpperCase();
+                          if (currentEmphColor && isCap) { fill = currentEmphColor; ctx.shadowColor = currentEmphGlow || currentEmphColor; ctx.shadowBlur = 15; }
+                          else if (!cfg.bg && !cfg.grad) { ctx.shadowColor = "rgba(0,0,0,0.95)"; ctx.shadowBlur = 12; ctx.shadowOffsetY = 4; }
+                          ctx.fillStyle = fill; ctx.textAlign = "left"; ctx.fillText(wordText, -wordWidth/2, 0);
+                          ctx.restore();
+                      }
+                      currentX += wordWidth + spaceW;
+                  });
+              });
               ctx.restore();
             }
 
             /* Text helpers */
             function roundRect(ctx,x,y,w,h,r){
+              if (w < 2 * r) r = w / 2;
+              if (h < 2 * r) r = h / 2;
               ctx.beginPath();
               ctx.moveTo(x+r,y);
               ctx.arcTo(x+w,y,x+w,y+h,r);
