@@ -423,14 +423,9 @@
                 left: 0;
                 top: 0;
                 bottom: 0;
-                width: 40%;
-                background: linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(122, 240, 198, 0.15),
-                    transparent
-                );
-                animation: aiScan 1.6s linear infinite;
+                width: 0%;
+                background: rgba(122, 240, 198, 0.25);
+                transition: width 0.4s ease;
             }
             @keyframes aiScan {
                 from {
@@ -3041,8 +3036,8 @@
                                 style="display: none; margin-top: 8px"
                             >
                                 <div class="ai-loader">
-                                    <div class="ai-loader-bar"></div>
-                                    <span>Analizando con IA...</span>
+                                    <div class="ai-loader-bar" id="transcribeProgressBar"></div>
+                                    <span style="position: relative; z-index: 1;">Analizando con IA... <strong id="transcribePercent">0%</strong></span>
                                 </div>
                             </div>
                             <div
@@ -3935,42 +3930,62 @@
                     );
                     return;
                 }
+                const pBar = document.getElementById("transcribeProgressBar");
+                const pText = document.getElementById("transcribePercent");
                 loaderWrap.style.display = "block";
-                updateStatus("Enviando a Deepgram...", true);
+                pBar.style.width = "0%";
+                pText.textContent = "0%";
+                let processingInterval = null;
+
+                updateStatus("Subiendo archivo a Deepgram...", true);
                 try {
-                    const params = new URLSearchParams({
-                        language: "es",
-                        punctuate: "true",
+                    const params = new URLSearchParams({ language: "es", punctuate: "true" });
+                    const url = "https://api.deepgram.com/v1/listen?" + params.toString();
+
+                    const json = await new Promise((resolve, reject) => {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", url);
+                        xhr.setRequestHeader("Authorization", "Token " + DEEPGRAM_API_KEY);
+                        xhr.setRequestHeader("Content-Type", "application/octet-stream");
+
+                        // Progreso de carga real (0% a 85%)
+                        xhr.upload.onprogress = (e) => {
+                            if (e.lengthComputable) {
+                                const percent = (e.loaded / e.total) * 85;
+                                pBar.style.width = percent + "%";
+                                pText.textContent = Math.round(percent) + "%";
+                                if (percent >= 84) updateStatus("Procesando audio...", true);
+                            }
+                        };
+
+                        // Simular procesamiento IA después de la subida (85% a 99%)
+                        xhr.upload.onload = () => {
+                            let val = 85;
+                            processingInterval = setInterval(() => {
+                                if (val < 99) {
+                                    val += (99 - val) * 0.05;
+                                    pBar.style.width = val + "%";
+                                    pText.textContent = Math.round(val) + "%";
+                                }
+                            }, 500);
+                        };
+
+                        xhr.onload = () => {
+                            if (processingInterval) clearInterval(processingInterval);
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                resolve(JSON.parse(xhr.responseText));
+                            } else {
+                                reject({ status: xhr.status, text: xhr.responseText });
+                            }
+                        };
+                        xhr.onerror = () => reject(new Error("Error de red"));
+                        xhr.send(file);
                     });
-                    const url =
-                        "https://api.deepgram.com/v1/listen?" +
-                        params.toString();
-                    const resp = await fetch(url, {
-                        method: "POST",
-                        headers: {
-                            Authorization: "Token " + DEEPGRAM_API_KEY,
-                            "Content-Type": "application/octet-stream",
-                        },
-                        body: file,
-                    });
-                    if (!resp.ok) {
-                        const txt = await resp.text();
-                        if (
-                            resp.status === 429 ||
-                            txt.toLowerCase().includes("quota") ||
-                            txt.toLowerCase().includes("insufficient")
-                        ) {
-                            loaderWrap.style.display = "none";
-                            updateStatus(
-                                "Deepgram: cuota excedida. Usa Prueba local.",
-                            );
-                            return;
-                        }
-                        throw new Error(
-                            "Deepgram error: " + resp.status + " " + txt,
-                        );
-                    }
-                    const json = await resp.json();
+
+                    // Al recibir respuesta, completamos al 100%
+                    pBar.style.width = "100%";
+                    pText.textContent = "100%";
+
                     const transcript =
                         json?.results?.channels?.[0]?.alternatives?.[0]
                             ?.transcript || "";
@@ -3996,12 +4011,24 @@
                             true,
                         );
                     }
-                    loaderWrap.style.display = "none";
+                    
+                    // Pequeño retardo para que el usuario vea el 100% antes de cerrar
+                    setTimeout(() => {
+                        loaderWrap.style.display = "none";
+                    }, 600);
+
                     videoEl.currentTime = 0;
                     await videoEl.play();
                 } catch (err) {
+                    if (processingInterval) clearInterval(processingInterval);
                     loaderWrap.style.display = "none";
-                    updateStatus("Error Deepgram: " + err.message);
+                    const status = err.status || 0;
+                    const text = err.text || err.message || "Error desconocido";
+                    if (status === 429 || text.toLowerCase().includes("quota")) {
+                        updateStatus("Deepgram: cuota excedida. Usa Prueba local.");
+                    } else {
+                        updateStatus("Error Deepgram: " + (status ? status + " " : "") + text);
+                    }
                     console.error(err);
                 }
             });
