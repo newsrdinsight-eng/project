@@ -3548,10 +3548,22 @@
                       const cleanWord = w.word.replace(/[.,!?;:'"()]/g, "").toLowerCase();
                       const negList = ["no","never","none","nothing","nowhere","nobody","neither","nor","can't","won't","don't","doesn't","didn't","isn't","aren't","wasn't","weren't","haven't","hasn't","hadn't","shouldn't","wouldn't","couldn't","mightn't","mustn't"];
                       const isNeg = negList.includes(cleanWord);
-                      const isCap = w.word.length > 3 && w.word[0] === w.word[0].toUpperCase();
+                      let isCap = w.word.length > 3 && w.word[0] === w.word[0].toUpperCase();
+
+                      // Fallback: Si no hay mayúsculas y hay un color de énfasis activo, 
+                      // coloreamos una palabra por línea (la del medio) para que coincida con el preview.
+                      const hasAnyCap = line.words.some(word => word.word.length > 3 && word.word[0] === word.word[0].toUpperCase());
+                      if (!hasAnyCap && !isNeg && currentEmphColor && i === Math.floor(line.words.length / 2)) {
+                          isCap = true;
+                      }
 
                       let fill = cfg.text;
-                      ctx.shadowBlur = 0; // Reset sombra por defecto
+                      
+                      // IMPORTANTE: Limpiar filtros y sombras antes de cada palabra
+                      ctx.filter = 'none';
+                      ctx.shadowBlur = 0;
+                      ctx.shadowColor = "transparent";
+                      ctx.shadowOffsetY = 0;
 
                       if (isNeg) {
                           fill = "#ff6b6b"; // Rojo de la clase .negative
