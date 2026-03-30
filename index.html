@@ -626,7 +626,7 @@
                 .tab-btn {
                     flex: 0 0 auto;
                     min-width: 80px;
-                    padding: 6px 12px;
+                    padding: 4px 10px;
                     font-size: 10px;
                     gap: 2px;
                     white-space: nowrap;
@@ -679,12 +679,10 @@
                     flex-shrink: 0;
                 }
                 .editor-right {
-                    order: 1; /* Video arriba */
                     order: 1;
                     width: 100%;
-                    min-height: auto;
-                    height: 55vh; /* Altura fija para el preview en móvil */
-                    height: 40vh; /* Altura controlada para el preview */
+                    min-height: 0;
+                    height: 25vh; /* Altura reducida para priorizar las herramientas */
                     flex-shrink: 0;
                     overflow: hidden;
                 }
@@ -882,12 +880,10 @@
                     width: 100%;
                 }
                 .editor-right {
-                    grid-column: 1;
-                    grid-row: 2;
                     order: 1;
                     width: 100%;
-                    min-height: 42vh;
-                    height: 38vh;
+                    min-height: 0;
+                    height: 20vh; /* Altura mínima para maximizar el panel de opciones */
                     flex-shrink: 0;
                     overflow: hidden;
                 }
@@ -900,7 +896,7 @@
                 }
                 .tab-btn {
                     min-width: 70px;
-                    padding: 5px 8px;
+                    padding: 4px 6px;
                     font-size: 9px;
                 }
                 .video-container {
