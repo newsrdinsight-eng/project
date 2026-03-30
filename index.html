@@ -41,14 +41,14 @@
             .editor-wrapper {
                 display: flex;
                 flex-direction: column;
-                height: calc(100vh - 64px);
-                overflow: hidden;
+                min-height: calc(100vh - 64px);
+                overflow-y: auto;
             }
             .editor-layout {
                 display: grid;
                 grid-template-columns: 360px 1fr;
                 flex: 1;
-                min-height: 0;
+                min-height: calc(100vh - 64px);
                 overflow: hidden;
             }
             .editor-left {
@@ -585,10 +585,11 @@
                     box-sizing: border-box;
                 }
                 .editor-wrapper {
-                    height: calc(100vh - 52px);
+                    height: calc(100dvh - 52px);
+                    overflow: hidden; /* Evita scroll doble */
+                    display: flex;
+                    flex-direction: column;
                     width: 100vw;
-                    overflow: hidden;
-                    position: relative;
                 }
                 .navbar {
                     height: 52px !important;
@@ -599,10 +600,12 @@
                     font-size: 16px;
                 }
                 .editor-layout {
-                    grid-template-columns: 1fr;
-                    grid-template-rows: auto 1fr auto;
+                    display: flex;
+                    flex-direction: column;
                     gap: 0;
-                    width: 100vw;
+                    flex: 1;
+                    height: 100%;
+                    overflow: hidden;
                 }
                 .tab-bar {
                     background: #050710;
@@ -622,13 +625,11 @@
                     white-space: nowrap;
                 }
                 .editor-left {
-                    grid-column: 1;
-                    grid-row: 1;
+                    order: 2;
+                    flex: 1;
                     width: 100%;
-                    max-height: none;
-                    border-right: none;
-                    border-bottom: 1px solid var(--border);
-                    overflow: visible;
+                    min-height: 0;
+                    overflow: hidden;
                     display: flex;
                     flex-direction: column;
                     padding: 0;
@@ -636,11 +637,10 @@
                 }
                 .editor-left-content {
                     flex: 1;
-                    display: grid !important;
                     overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
                     overflow-x: hidden;
                     background: var(--bg-panel);
-                    border-right: none;
                     width: 100%;
                 }
                 .tab-content {
@@ -666,11 +666,10 @@
                     flex-shrink: 0;
                 }
                 .editor-right {
-                    grid-column: 1;
-                    grid-row: 2;
+                    order: 1;
                     width: 100%;
-                    min-height: 40vh;
-                    flex: 1;
+                    height: 40vh; /* Altura controlada para el preview */
+                    flex-shrink: 0;
                     overflow: hidden;
                 }
                 .preview-center {
@@ -782,10 +781,11 @@
                     box-sizing: border-box;
                 }
                 .editor-wrapper {
-                    height: calc(100vh - 48px);
+                    height: calc(100dvh - 48px);
                     overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
                     width: 100vw;
-                    position: relative;
                 }
                 .navbar {
                     height: 48px !important;
@@ -797,27 +797,28 @@
                     gap: 4px;
                 }
                 .editor-layout {
-                    grid-template-columns: 1fr;
-                    grid-template-rows: auto 1fr auto;
-                    width: 100vw;
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    height: 100%;
                     overflow: hidden;
                 }
                 .tab-bar {
                     height: 44px;
                     display: flex;
-                    overflow-x: auto;
+                    overflow-x: scroll;
                     overflow-y: hidden;
                     background: #050710;
                     width: 100%;
+                    scrollbar-width: none;
                 }
+                .tab-bar::-webkit-scrollbar { display: none; }
                 .editor-left {
-                    grid-column: 1;
-                    grid-row: 1;
+                    order: 2;
+                    flex: 1;
                     width: 100%;
-                    max-height: none;
-                    border-right: none;
-                    border-bottom: 1px solid var(--border);
-                    overflow: visible;
+                    min-height: 0;
+                    overflow: hidden;
                     display: flex;
                     flex-direction: column;
                     padding: 0;
@@ -826,9 +827,9 @@
                 .editor-left-content {
                     flex: 1;
                     overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
                     overflow-x: hidden;
                     background: var(--bg-panel);
-                    display: flex !important;
                     flex-direction: column;
                     width: 100%;
                 }
@@ -855,10 +856,10 @@
                     width: 100%;
                 }
                 .editor-right {
-                    grid-column: 1;
-                    grid-row: 2;
+                    order: 1;
                     width: 100%;
-                    min-height: 42vh;
+                    height: 38vh;
+                    flex-shrink: 0;
                     overflow: hidden;
                 }
                 .preview-center {
@@ -2768,8 +2769,32 @@
                     min-height: 520px;
                 }
             }
+
+            /* ─── FOOTER EPIC ─── */
+            .footer-epic {
+                background: #050710;
+                border-top: 1px solid var(--border);
+                margin-top: 60px;
+                padding: 40px 20px;
+                text-align: center;
+                color: var(--muted);
+                font-size: 14px;
+                flex-shrink: 0;
+            }
+            .footer-epic strong {
+                color: var(--accent-a);
+                font-family: 'Space Grotesk', sans-serif;
+            }
+            .footer-epic .creator {
+                margin-top: 8px;
+                display: block;
+                font-size: 11px;
+                color: var(--muted2);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
         </style>
-        <script async src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
     </head>
     <body>
         <nav class="navbar">
@@ -3282,6 +3307,12 @@
                 </div>
                 <div class="ai-clips-carousel" id="aiClipsCarousel"></div>
             </div>
+
+            <!-- EPIC FOOTER -->
+            <footer class="footer-epic">
+                <p>&copy; <strong>EdiclipDR</strong> — Todos los derechos reservados</p>
+                <span class="creator">Creado por <strong>Sam Alexander</strong></span>
+            </footer>
         </div>
 
         <script>
@@ -3419,6 +3450,22 @@
                             if(t >= s.start && t <= s.end){
                                 drawSubtitleOnCanvas(s);
                             }
+                        }
+                    }
+
+                    // draw overlay image on canvas (only during export to avoid duplicates in preview)
+                    if (isRecording && overlayWrap) {
+                        const img = overlayWrap.querySelector('img');
+                        if (img && img.complete) {
+                            const scaleX = CANVAS_W / videoContainer.clientWidth;
+                            const scaleY = CANVAS_H / videoContainer.clientHeight;
+                            
+                            const x = (parseFloat(overlayWrap.style.left) || 0) * scaleX;
+                            const y = (parseFloat(overlayWrap.style.top) || 0) * scaleY;
+                            const w = (parseFloat(overlayWrap.style.width) || 0) * scaleX;
+                            const h = (parseFloat(overlayWrap.style.height) || 0) * scaleY;
+                            
+                            ctx.drawImage(img, x, y, w, h);
                         }
                     }
 
@@ -5019,6 +5066,9 @@
             let exportRecorder = null;
             let exportChunks = [];
             let combinedStream = null;
+            // Nodos de audio persistentes para evitar errores de reconexión
+            let persistentSourceNode = null;
+            let persistentDestination = null;
 
             downloadBtn.addEventListener("click", async () => {
                 if (!videoEl.src) { alert("Carga un video primero"); return; }
@@ -5034,15 +5084,16 @@
                 isRecording = true;
                 downloadBtn.disabled = true;
                 downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Procesando...';
+                
+                // Asegurar volumen y salida de audio
+                videoEl.muted = false;
+                videoEl.volume = 1.0;
 
                 try {
                     videoEl.currentTime = startTime;
                     await videoEl.play().catch(err => console.warn("Play:", err));
 
                     const vStream = canvas.captureStream(30);
-                    let audioTracks = [];
-                    
-                    // Capturar audio de forma robusta
                     try {
                         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                         if (audioCtx.state === 'suspended') await audioCtx.resume();
@@ -5053,15 +5104,18 @@
                             mediaSourceNode.connect(mediaStreamDestination);
                             mediaSourceNode.connect(audioCtx.destination);
                         }
-                        audioTracks = mediaStreamDestination.stream.getAudioTracks();
                     } catch(e){ console.warn("Audio Context:", e); }
 
                     combinedStream = new MediaStream();
                     vStream.getVideoTracks().forEach(t => combinedStream.addTrack(t));
-                    audioTracks.forEach(t => combinedStream.addTrack(t));
+                    if (mediaStreamDestination) {
+                        mediaStreamDestination.stream.getAudioTracks().forEach(t => combinedStream.addTrack(t));
+                    }
 
                     exportChunks = [];
-                    let options = { mimeType: 'video/webm;codecs=vp8,opus' };
+                    // Preferencia de grabación
+                    let options = { mimeType: 'video/webm;codecs=vp9,opus' };
+                    if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'video/webm;codecs=vp8,opus' };
                     if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'video/webm' };
                     
                     try {
@@ -5092,20 +5146,44 @@
                     }, 100);
 
                     async function processToMp4(recordedChunks) {
+                        const mimeType = exportRecorder.mimeType;
+                        // Si ya se grabó en mp4 nativamente, descargamos directamente
+                        if (mimeType.includes('mp4')) {
+                            downloadBlob(new Blob(recordedChunks, { type: mimeType }), 'mp4');
+                            cleanupDownload();
+                            return;
+                        }
+
                         downloadBtn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(4,32,40,0.3);border-top-color:#042028;border-radius:50%;animation:spin 0.8s linear infinite"></div> Convirtiendo a MP4...';
                         const webmBlob = new Blob(recordedChunks, { type: 'video/webm' });
                         
-                        if (window.FFmpeg) {
+                        // Lógica para FFmpeg.wasm v0.12.6 (Soporte para MP4 real)
+                        const ffmpegLib = window.FFmpegWasm || window.FFmpeg;
+                        if (ffmpegLib) {
                             try {
-                                const { FFmpeg } = window.FFmpeg;
+                                const { FFmpeg, toBlobURL } = ffmpegLib;
                                 const ffmpeg = new FFmpeg();
-                                await ffmpeg.load();
+                                const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+                                
+                                await ffmpeg.load({
+                                    coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+                                    wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+                                });
+
                                 await ffmpeg.writeFile('input.webm', new Uint8Array(await webmBlob.arrayBuffer()));
-                                await ffmpeg.exec(['-i', 'input.webm', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-c:a', 'copy', '-movflags', '+faststart', 'output.mp4']);
+                                
+                                // Conversión a MP4 con ajustes de compatibilidad y velocidad
+                                await ffmpeg.exec([
+                                    '-i', 'input.webm', 
+                                    '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '22', '-pix_fmt', 'yuv420p',
+                                    '-c:a', 'aac', '-b:a', '128k', '-ar', '44100',
+                                    '-movflags', '+faststart', 'output.mp4'
+                                ]);
+
                                 const data = await ffmpeg.readFile('output.mp4');
                                 downloadBlob(new Blob([data.buffer], { type: 'video/mp4' }), 'mp4');
                             } catch (e) {
-                                console.warn("FFmpeg falló, bajando WebM:", e);
+                                console.error("Error FFmpeg (Verifica encabezados COOP/COEP):", e);
                                 downloadBlob(webmBlob, 'webm');
                             }
                         } else {
@@ -5140,7 +5218,7 @@
                 subtitleEl.style.visibility = "visible";
                 downloadBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar Short';
                 downloadBtn.disabled = false;
-                if(audioCtx && audioCtx.state !== 'closed') { try { audioCtx.close(); } catch(e){} audioCtx = null; }
+                updateStatus('Listo para otra edición', true);
             }
         </script>
     </body>
