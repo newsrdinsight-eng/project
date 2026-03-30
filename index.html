@@ -3480,10 +3480,14 @@
             document.getElementById('forgotPasswordBtn').addEventListener('click', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('loginEmail').value;
-                if(!email) { alert("Ingresa tu correo en el campo superior para restablecer la contraseña"); return; }
-                auth.sendPasswordResetEmail(email)
-                    .then(() => alert("Se ha enviado un correo para restablecer tu contraseña"))
-                    .catch(e => alert("Error: " + e.message));
+                if(!email) { alert("Por favor, escribe el correo en el campo de arriba para solicitar el cambio."); return; }
+                
+                const adminEmail = "akingalpha1282@gmail.com";
+                const subject = encodeURIComponent("Solicitud de cambio de contraseña - EdiclipDR");
+                const message = encodeURIComponent(`El correo "${email}" el cual se colocó en el campo pidiendo cambiar la clave está solicitando cambiar la contraseña.`);
+                
+                window.location.href = `mailto:${adminEmail}?subject=${subject}&body=${message}`;
+                alert("Se ha generado una solicitud para el administrador. Por favor, envía el correo que se acaba de abrir.");
             });
             document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut());
 
