@@ -585,11 +585,14 @@
                     box-sizing: border-box;
                 }
                 .editor-wrapper {
+                    height: calc(100vh - 52px);
                     height: calc(100dvh - 52px);
-                    overflow: hidden; 
+                    overflow: hidden; /* Evita scroll doble */
                     display: flex;
                     flex-direction: column;
                     width: 100vw;
+                    overflow-y: auto;
+                    overflow-x: hidden;
                 }
                 .navbar {
                     height: 52px !important;
@@ -600,6 +603,10 @@
                     font-size: 16px;
                 }
                 .editor-layout {
+                    grid-template-columns: 1fr;
+                    grid-template-rows: auto auto auto;
+                    gap: 0;
+                    width: 100vw;
                     display: flex;
                     flex-direction: column;
                     gap: 0;
@@ -625,9 +632,13 @@
                     white-space: nowrap;
                 }
                 .editor-left {
+                    order: 2; /* Controles debajo del video */
                     order: 2;
                     flex: 1;
                     width: 100%;
+                    max-height: none;
+                    border-right: none;
+                    border-top: 1px solid var(--border);
                     min-height: 0;
                     overflow: hidden;
                     display: flex;
@@ -637,9 +648,12 @@
                 }
                 .editor-left-content {
                     flex: 1;
+                    display: grid !important;
                     overflow-y: auto;
                     -webkit-overflow-scrolling: touch;
                     overflow-x: hidden;
+                    background: var(--bg-panel);
+                    border-right: none;
                     width: 100%;
                 }
                 .tab-content {
@@ -666,11 +680,13 @@
                 }
                 .editor-right {
                     order: 1; /* Video arriba */
+                    order: 1;
                     width: 100%;
-                    height: 28vh; /* Altura reducida para dar espacio a opciones */
+                    min-height: auto;
+                    height: 55vh; /* Altura fija para el preview en móvil */
+                    height: 40vh; /* Altura controlada para el preview */
                     flex-shrink: 0;
                     overflow: hidden;
-                    background: #000;
                 }
                 .preview-center {
                     width: 100%;
@@ -781,11 +797,14 @@
                     box-sizing: border-box;
                 }
                 .editor-wrapper {
+                    height: calc(100vh - 48px);
                     height: calc(100dvh - 48px);
                     overflow: hidden;
                     display: flex;
                     flex-direction: column;
+                    overflow: hidden;
                     width: 100vw;
+                    overflow-y: auto;
                 }
                 .navbar {
                     height: 48px !important;
@@ -797,6 +816,9 @@
                     gap: 4px;
                 }
                 .editor-layout {
+                    grid-template-columns: 1fr;
+                    grid-template-rows: auto auto auto;
+                    width: 100vw;
                     display: flex;
                     flex-direction: column;
                     flex: 1;
@@ -817,6 +839,9 @@
                     order: 2;
                     flex: 1;
                     width: 100%;
+                    max-height: none;
+                    border-right: none;
+                    border-top: 1px solid var(--border);
                     min-height: 0;
                     overflow: hidden;
                     display: flex;
@@ -829,7 +854,8 @@
                     overflow-y: auto;
                     -webkit-overflow-scrolling: touch;
                     overflow-x: hidden;
-                    display: flex;
+                    background: var(--bg-panel);
+                    display: flex !important;
                     flex-direction: column;
                     width: 100%;
                 }
@@ -856,9 +882,12 @@
                     width: 100%;
                 }
                 .editor-right {
+                    grid-column: 1;
+                    grid-row: 2;
                     order: 1;
                     width: 100%;
-                    height: 25vh; /* Altura optimizada para móviles pequeños */
+                    min-height: 42vh;
+                    height: 38vh;
                     flex-shrink: 0;
                     overflow: hidden;
                 }
@@ -3233,9 +3262,6 @@
                             Vista Previa · 9:16
                         </div>
                         <div class="preview-actions">
-                            <button id="toggleToolsBtn" class="btn-action ghost-action" style="padding: 4px 8px; font-size: 10px; margin-right: 8px; display: none; align-items: center; justify-content: center;" title="Expandir Preview">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-                            </button>
                             <span class="preview-badge" id="previewBadge"
                                 >Sin video</span
                             >
@@ -3351,18 +3377,6 @@
             const timeLabel = document.getElementById("timeLabel");
             const subtitlesContainer = document.getElementById("subtitles");
             const downloadBtn = document.getElementById("downloadBtn");
-
-            // Lógica para ocultar/mostrar herramientas en móvil (Modo App)
-            const toggleToolsBtn = document.getElementById("toggleToolsBtn");
-            const editorWrapper = document.querySelector(".editor-wrapper");
-            
-            toggleToolsBtn.addEventListener("click", () => {
-                editorWrapper.classList.toggle("tools-hidden");
-                const isHidden = editorWrapper.classList.contains("tools-hidden");
-                toggleToolsBtn.innerHTML = isHidden 
-                    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"/></svg>' 
-                    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
-            });
 
             // Global audio context handling
             let audioCtx = null;
